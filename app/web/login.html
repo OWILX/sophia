@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sophia-OWILX • Sign In</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2DD4BF" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/login.css" />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  />
+</head>
+<body class="page">
+  <main class="login-screen">
+  <section class="login-layout">
+
+    <!-- Brand / Info Panel -->
+    <aside class="brand-panel">
+      <img src="assets/images/logo2.png" alt="Sophia-OWILX Logo" class="brand-logo" />
+      <h1>Sophia-OWILX</h1>
+      <p>
+        Study to show thyself.<br />
+        Master your courses with fun quizzes.
+      </p>
+    </aside>
+
+    <!-- Auth Card -->
+    <section class="auth-panel">
+      <div class="login-card">
+        <img src="assets/images/logo2.png" alt="" class="login-logo" />
+
+        <h2>Welcome back</h2>
+
+        <div class="login-actions">
+          <button class="btn btn-google" id="google-btn">
+            <img src="assets/images/google.png" alt="Google Logo" class="google-logo" />
+            Continue with Google
+          </button>
+
+          <button class="btn btn-guest">
+            <i class="fa-solid fa-user"></i>
+            Continue as Guest
+          </button>
+        </div>
+
+        <p class="terms">
+          By continuing, you agree to our
+          <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+        </p>
+      </div>
+    </section>
+
+  </section>
+</main>
+
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

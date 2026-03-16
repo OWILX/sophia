@@ -1,6 +1,5 @@
 @import "variables.css";
 @import "reset.css";
-@import "main.css";
 /* Screen */
 .login-screen {
   min-height: 100vh;

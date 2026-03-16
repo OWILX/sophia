@@ -20,7 +20,7 @@
   --gray-800: #1F2937;
   --gray-900: #111827;
   --black: #000000;
-  --error: #EF4444; /* For delete swipe bg */
+
   /* Semantic Colors */
   --bg-primary: var(--white);
   --bg-secondary: var(--gray-50);
