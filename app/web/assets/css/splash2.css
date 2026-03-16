@@ -1,0 +1,45 @@
+@import "variables.css";
+@import "reset.css";
+@import "components.css";
+@import "main.css";
+
+.splash-screen {
+  background: linear-gradient(135deg, #2dd4bf 0%, #0ea5e9 100%);
+  animation: gradientFlow 12s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.splash-logo {
+  animation: 
+    logoReveal 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+    float 3.2s ease-in-out infinite 1.6s;
+}
+
+@keyframes logoReveal {
+  0%   { transform: scale(0.4) translateY(40px); opacity: 0; }
+  60%  { transform: scale(1.12) translateY(-12px); }
+  80%  { transform: scale(0.96); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.splash-content h1 {
+  animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.5s both;
+}
+
+.tagline {
+  display: inline-block;
+  animation: fadeInUp 1s 0.9s both;
+  /* Optional: very subtle breathing */
+  animation: fadeInUp 1s 0.9s both, gentleBreath 6s ease-in-out infinite 2.5s;
+}
+
+@keyframes gentleBreath {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.03); }
+}

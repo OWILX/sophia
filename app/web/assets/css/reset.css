@@ -1,0 +1,61 @@
+/* ========== MODERN CSS RESET (2026 Edition) ========== */
+/* Inspired by Josh Comeau's reset + modern updates */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  /* Improve font rendering */
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Allow percentage-based heights and smooth scrolling */
+  height: 100%;
+  scroll-behavior: smooth;
+
+  /* Enable size interpolation for animations (modern browsers) */
+  interpolate-size: allow-keywords;
+}
+
+body {
+  min-height: 100%;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%; /* Prevent auto-zoom on mobile */
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+ul, ol {
+  list-style: none;
+  padding: 0;
+}
+
+/* Remove default margin on common elements while preserving semantics */
+h1, h2, h3, h4, h5, h6,
+figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+/* Accessible focus styles */
+:focus-visible {
+  outline: 3px solid var(--brand-accent);
+  outline-offset: 3px;
+}

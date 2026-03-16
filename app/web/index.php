@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LetStudy</title>
+
+  <!-- PWA Essentials -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2DD4BF">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/splash.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="splash-screen">
+    <div class="splash-content">
+      <img src="assets/images/logo2.png" alt="LetStudy Logo" class="splash-logo">
+      <h1>LetStudy</h1>
+      <p class="tagline"><i>"Study to show thyself..."</i> </p>
+
+      <div class="splash-loader">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+  <script defer src="assets/js/app.js"></script>
+</body>
+</html>

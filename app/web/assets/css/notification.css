@@ -1,0 +1,155 @@
+@import "dashboard.css";
+
+.notifications-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-3);
+    border-bottom: 1px solid var(--gray-200);
+    background-color: var(--white);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s var(--easing-default);
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-right: var(--spacing-3);
+    min-width: 32px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-desc {
+    font-size: 1rem;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--gray-500);
+    font-size: 1.25rem;
+    padding: var(--spacing-1);
+    cursor: pointer;
+    position: absolute;
+    right: var(--spacing-2);
+    top: 50%;
+    transform: translateY(-50%);
+    display: none; /* Shown on hover or swipe */
+}
+
+.notification-item:hover .close-btn {
+    display: block;
+}
+
+.notifications-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-2);
+}
+
+.secondary-btn {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+    border: none;
+    border-radius: 8px;
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s var(--easing-default);
+}
+
+.secondary-btn:hover {
+    background-color: var(--gray-200);
+}
+
+/* Swipe delete bg */
+.swipe-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--error);
+    color: var(--white);
+    font-size: 1rem;
+    transform: translateX(100%);
+    transition: transform 0.3s var(--easing-default);
+}
+
+/* Badge for unread dot */
+.badge-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--error);
+    border-radius: 50%;
+    display: none;
+}
+
+.icon-btn.has-unread .badge-dot {
+    display: block;
+}
+/* assets/css/screens.css additions */
+
+.notifications-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-50);
+    color: var(--gray-700);
+    min-height: 100vh;
+    padding-bottom: 80px; /* Space for bottom nav */
+}
+
+.notifications-main {
+    padding: var(--spacing-3);
+    animation: fade-up 0.5s var(--easing-default);
+}
+
+/* Media queries for larger screens (similar to dashboard) */
+@media (min-width: 768px) {
+    .notifications-main {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .notifications-list {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .bottom-nav {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 240px;
+        border-top: none;
+        box-shadow: var(--shadow-material);
+    }
+
+    .content-wrapper {
+        margin-left: 240px;
+        padding-top: 64px;
+    }
+
+    .app-header {
+        left: 240px;
+        right: 0;
+    }
+}

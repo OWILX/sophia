@@ -1,0 +1,150 @@
+@import "dashboard.css";
+
+.leaderboard-section {
+    margin-bottom: var(--spacing-4);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+    flex-wrap: wrap;
+}
+
+#criteria-select,
+#period-select,
+#course-select {
+    padding: var(--spacing-1) var(--spacing-2);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background-color: var(--white);
+    font-size: 0.875rem;
+}
+
+#course-select-wrapper {
+    margin-bottom: var(--spacing-2);
+}
+
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-rank {
+    font-weight: 700;
+    color: var(--primary);
+    min-width: 40px;
+    font-size: 1.125rem;
+}
+
+.leaderboard-user {
+    flex: 1;
+    font-size: 1rem;
+    color: var(--gray-700);
+}
+
+.leaderboard-score {
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+.competitions-section {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-3);
+    box-shadow: var(--shadow-soft);
+}
+
+.competitions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.competition-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-2) 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.competition-item:last-child {
+    border-bottom: none;
+}
+
+.competition-icon {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-right: var(--spacing-3);
+}
+
+.competition-content {
+    flex: 1;
+}
+
+.competition-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 4px;
+}
+
+.competition-desc {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+}
+
+.competition-link {
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+}
+
+.competition-link:hover {
+    text-decoration: underline;
+}
+
+/* assets/css/screens.css additions */
+
+.leaderboard-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-50);
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.leaderboard-main {
+    padding: var(--spacing-3);
+    animation: fade-up 0.5s var(--easing-default);
+}
+
+@media (min-width: 768px) {
+    .leaderboard-main {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        flex-wrap: nowrap;
+    }
+}

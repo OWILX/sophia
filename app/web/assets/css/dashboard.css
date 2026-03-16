@@ -1,0 +1,619 @@
+@import "variables.css";
+@import "reset.css";
+@import "main.css";
+@import "components.css";
+
+/* assets/css/components.css additions (append or create if separate files) */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: var(--shadow-soft);
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+}
+
+.app-logo {
+    width: 40px;
+    height: 40px;
+    transform: scale(2.05);
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    padding: var(--spacing-1);
+    margin-left: var(--spacing-2);
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--gray-500);
+    min-width: var(--spacing-6);
+    min-height: var(--spacing-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s var(--easing-default);
+}
+
+.icon-btn:active {
+    background-color: var(--gray-100);
+}
+
+.primary-btn {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    margin: var(--spacing-3) auto;
+    display: block;
+    text-align: center;
+    min-height: var(--spacing-6);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.1s var(--easing-default), box-shadow 0.1s var(--easing-default);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-soft);
+}
+
+.stats-section {
+    margin-bottom: var(--spacing-4);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Forces 3 equal columns */
+    gap: var(--spacing-2);
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-1); /* Tighter horizontal padding */
+    min-height: 80px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-title {
+    font-size: 0.75rem; /* Slightly smaller for mobile */
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+    white-space: nowrap; /* Prevents text from wrapping to 2 lines */
+}
+
+.stat-value {
+    font-size: 1.1rem; /* Balanced size */
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+/* Ensure skeleton height matches real content exactly */
+.stat-card.skeleton {
+    height: 80px; 
+    border: none;
+}
+
+
+.course-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-3);
+    min-width: 160px;
+    box-shadow: var(--shadow-material);
+    margin-right: var(--spacing-2);
+}
+
+.course-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.course-progress {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    margin-top: var(--spacing-1);
+}
+
+.activity-item {
+    padding: var(--spacing-2) 0;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+}
+
+
+.nav-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: var(--spacing-1) 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--gray-500);
+    text-decoration: none;
+    font-size: 0.75rem;
+    padding: var(--spacing-1);
+    min-width: var(--spacing-6);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+/* ==========================================================================
+   Sidebar (formerly bottom-nav) on desktop
+   ========================================================================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    border-top: 1px solid var(--gray-200);
+    z-index: 100;
+    box-shadow: var(--shadow-soft);
+    height: 68px; /* mobile height */
+    transition: all 0.3s var(--easing-default);
+}
+
+.dashboard-body {
+    padding-bottom: 68px; /* mobile: space for bottom nav */
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Desktop: fixed left sidebar from TOP to BOTTOM
+   ───────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+
+    .bottom-nav {
+        top: 0;                     /* Start from very top */
+        bottom: 0;
+        left: 0;
+        right: auto;
+        width: 240px;
+        height: auto;               /* Full height */
+        border-top: none;
+        border-right: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-material);
+        padding-top: 0;             /* REMOVE the old padding-top:80px */
+        overflow-y: auto;           /* Scroll if many items */
+        z-index: 90;                /* Below header */
+    }
+
+    .nav-bar {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: var(--spacing-3) 0;
+        height: 100%;
+    }
+
+    .nav-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--spacing-3);
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: 1rem;
+        min-height: 56px;
+        border-radius: 0 12px 12px 0;
+    }
+
+    .nav-item i {
+        font-size: 1.5rem;
+        width: 32px;
+        text-align: center;
+    }
+
+    .nav-item.active,
+    .nav-item:hover,
+    .nav-item:focus {
+        background-color: var(--gray-50);
+        color: var(--primary);
+    }
+
+    /* Header: fixed, starts AFTER sidebar, full remaining width */
+    .app-header {
+        position: fixed;
+        top: 0;
+        left: 240px;                /* Matches sidebar width */
+        right: 0;
+        height: 64px;               /* Explicit height - adjust to your header's actual height */
+        background-color: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+        z-index: 110;               /* Above sidebar and content */
+        box-shadow: var(--shadow-soft);
+        display: flex;
+        align-items: center;
+        padding: 0 var(--spacing-3);
+    }
+
+    /* Content starts below header and to the right of sidebar */
+    .content-wrapper {
+        margin-left: 240px;         /* Sidebar width */
+        padding-top: 64px;          /* Matches header height → prevents overlap */
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .dashboard-main {
+        padding: var(--spacing-4) var(--spacing-5);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Body no longer needs bottom padding on desktop */
+    .dashboard-body {
+        padding-bottom: 0;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Ensure no reduced-motion issues
+   ───────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .bottom-nav,
+    .app-header,
+    .content-wrapper,
+    .nav-item {
+        transition: none !important;
+    }
+}
+.skeleton {
+    background: var(--skeleton-bg);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
+    height: 100px; /* Adjust per component */
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Ripple effect */
+.ripple {
+    position: absolute;
+    background: var(--gray-200);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.dashboard-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-50);
+    color: var(--gray-700);
+    min-height: 100vh;
+    padding-bottom: 80px; /* Space for bottom nav */
+}
+
+.dashboard-main {
+    padding: var(--spacing-3);
+    animation: fade-up 0.5s var(--easing-default);
+}
+/* assets/css/screens.css updates (replace quick-stats, courses, recent-activity styles if needed) */
+
+
+.quick-stats {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+    overflow-x: auto;
+}
+
+#quick-stats-title {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border-width: initial;
+}
+
+.courses {
+    margin-bottom: var(--spacing-4);
+}
+
+.courses-container {
+    display: flex;
+    overflow-x: auto;
+    gap: var(--spacing-2);
+    padding-bottom: var(--spacing-2);
+}
+
+.courses-container::-webkit-scrollbar {
+    display: none;
+}
+
+#courses-title,
+#recent-activity-title {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border-width: initial;
+}
+
+.recent-activity {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-3);
+    box-shadow: var(--shadow-soft);
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media queries for larger screens */
+@media (min-width: 768px) {
+    .dashboard-main {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .quick-stats {
+        justify-content: center;
+    }
+
+    .courses-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        overflow-x: visible;
+    }
+
+
+    .nav-bar {
+        justify-content: flex-start;
+        gap: var(--spacing-4);
+        padding: var(--spacing-2) var(--spacing-3);
+    }
+
+    .nav-item {
+        flex-direction: row;
+        gap: var(--spacing-1);
+        font-size: 1rem;
+    }
+
+    .nav-item i {
+        margin-bottom: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+/* assets/css/components.css additions (append these) */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.section-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.more-link {
+    font-size: 0.875rem;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--spacing-1);
+    min-width: var(--spacing-6);
+    min-height: var(--spacing-6);
+    transition: color 0.2s var(--easing-default);
+}
+
+.more-link:hover,
+.more-link:focus {
+    color: darken(var(--primary), 10%);
+}
+
+.more-link i {
+    font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Sidebar Collapse / Expand
+   ========================================================================== */
+
+/* Toggle button - only visible on desktop */
+/* Sidebar header (for toggle placement) */
+.sidebar-header {
+    display: none;                      /* hidden on mobile */
+    height: 64px;                       /* same as app-header height for alignment */
+    position: relative;
+    border-bottom: 1px solid var(--gray-200);
+    background-color: var(--white);
+}
+
+.sidebar-toggle {
+    display: none;                      /* default hidden */
+    position: absolute;
+    top: 50%;
+    right: var(--spacing-3);
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-500);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    z-index: 95;
+    transition: color 0.2s, transform 0.3s var(--easing-default);
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus {
+    color: var(--primary);
+}
+
+.sidebar-toggle[aria-expanded="false"] i {
+    transform: rotate(180deg);
+}
+/* ─────────────────────────────────────────────────────────────────────────
+   Desktop sidebar + collapse states
+   ───────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+
+    .sidebar-header {
+        display: block;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    /* When collapsed: move toggle to stay visible and centered-ish */
+    .bottom-nav.collapsed .sidebar-toggle {
+        right: 50%;
+        transform: translate(50%, -50%);
+    }
+
+    /* Make sure nav starts below the header area */
+    .nav-bar {
+        padding-top: var(--spacing-2);  /* small breathing room */
+    }
+
+    /* When collapsed, reduce padding on items so icons stay centered */
+    .bottom-nav.collapsed .nav-item {
+        padding: var(--spacing-3) 0;
+        justify-content: center;
+    }
+
+    .bottom-nav {
+        transition: width 0.4s var(--easing-default);
+        overflow: hidden;
+    }
+
+    .bottom-nav.collapsed {
+        width: 80px;                    /* icon-only mode */
+    }
+    .bottom-nav.collapsed .sidebar-toggle i {
+        transform: rotate(180deg); /* optional fallback if you prefer rotation */
+    }
+    .bottom-nav.collapsed .nav-item span {
+        opacity: 0;
+        width: 0;
+        margin-left: 0;
+        transition: opacity 0.3s var(--easing-default), width 0.4s var(--easing-default);
+    }
+
+
+    .bottom-nav.collapsed .nav-item i {
+        margin: 0;
+    }
+
+    /* Adjust layout when collapsed */
+    body.sidebar-collapsed .content-wrapper {
+        margin-left: 80px;
+    }
+
+    body.sidebar-collapsed .app-header {
+        left: 80px;
+    }
+
+    /* Prevent text from wrapping awkwardly during transition */
+    .nav-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        transition: all 0.4s var(--easing-default);
+    }
+}

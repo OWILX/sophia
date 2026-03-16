@@ -1,0 +1,105 @@
+@import "dashboard.css";
+
+.profile-header {
+    text-align: center;
+    padding: var(--spacing-4) 0;
+    background: linear-gradient(to bottom, var(--primary) 0%, var(--primary) 50%, var(--gray-50) 100%);
+    border-radius: 0 0 24px 24px;
+    margin-bottom: var(--spacing-3);
+    color: var(--white);
+}
+
+.greeting {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-1);
+}
+
+.motivation {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.stat-cards {
+    display: flex;
+    gap: var(--spacing-2);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-2);
+}
+
+.stat-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-3);
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-card h3 {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    margin-bottom: var(--spacing-1);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.progress-charts {
+    margin-bottom: var(--spacing-4);
+}
+
+.chart-container {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    box-shadow: var(--shadow-soft);
+}
+
+.chart-container h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-2);
+    text-align: center;
+    color: var(--gray-700);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: var(--spacing-2);
+}
+/* assets/css/screens.css additions */
+
+.profile-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-50);
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.profile-main {
+    padding: var(--spacing-3);
+    animation: fade-up 0.5s var(--easing-default);
+}
+
+@media (min-width: 768px) {
+    .profile-main {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .stat-cards {
+        justify-content: center;
+    }
+
+    .chart-container canvas {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
