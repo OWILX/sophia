@@ -32,26 +32,6 @@ async function checkUser() {
 // ────────────────────────────────────────────────
 //  LOGIN BUTTON
 // ────────────────────────────────────────────────
-
-
-  // If a user session already exists → sign out
-  
-
-  // Otherwise start Google OAuth
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: DASHBOARD_URL
-    }
-  });
-
-  if (error) {
-    console.error(error);
-    setLoading(googleBtn, false);
-    document.body.classList.remove("page-exit");
-  }
-
-});
 document.addEventListener("DOMContentLoaded", () => {
   const googleBtn = document.getElementById("google-btn");
   if (!googleBtn) return;
