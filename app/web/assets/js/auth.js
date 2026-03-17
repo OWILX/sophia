@@ -32,6 +32,26 @@ async function checkUser() {
 // ────────────────────────────────────────────────
 //  LOGIN BUTTON
 // ────────────────────────────────────────────────
+
+
+  // If a user session already exists → sign out
+  
+
+  // Otherwise start Google OAuth
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: DASHBOARD_URL
+    }
+  });
+
+  if (error) {
+    console.error(error);
+    setLoading(googleBtn, false);
+    document.body.classList.remove("page-exit");
+  }
+
+});
 document.addEventListener("DOMContentLoaded", () => {
   const googleBtn = document.getElementById("google-btn");
   if (!googleBtn) return;
@@ -40,21 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("page-exit");
     // small animation delay
     await new Promise(resolve => setTimeout(resolve, 500));
-    const { data: { user }, error } = await client.auth.getUser();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+    const { error } = await supabase.auth.signOut();
     if (error) {
       console.error(error);
       setLoading(googleBtn, false);
-      return;
-    }
-    // If user exists → logout
-    if (user) {
-      const { error: signOutError } = await client.auth.signOut();
-      if (signOutError) {
-        console.error(signOutError);
-      }
-      setLoading(googleBtn, false);
       document.body.classList.remove("page-exit");
-      window.location.href = DASHBOARD_URL;
+      return;
     }
 
     // Otherwise → login with Google
