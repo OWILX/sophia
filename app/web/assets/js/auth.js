@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("page-exit");
     // small animation delay
     await new Promise(resolve => setTimeout(resolve, 500));
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await client.auth.getSession();
     if (session) {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await client.auth.signOut();
     if (error) {
       console.error(error);
       setLoading(googleBtn, false);
