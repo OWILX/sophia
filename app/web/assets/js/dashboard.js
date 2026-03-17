@@ -1,6 +1,32 @@
 // assets/js/dashboard.js
-import { getSessionValue } from './sessionService.js';
+const { createClient } = supabase;
+const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
+const DASHBOARD_URL = "https://owilx.github.io/sophia/app/web/dashboard.html";
+const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
+const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+async function initDashboard() {
+      const { data: { session }, error } = await client.auth.getSession();
+      if (error || !session) {
+        // No valid session, kick the user back out
+        console.warn("No active session. Redirecting to login...");
+        window.location.replace(LOGIN_URL);
+        return;
+      }
+    }
+
+    // ────────────────────────────────────────────────
+    //  AUTH STATE LISTENER (Security Guard)
+    // ────────────────────────────────────────────────
+    client.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        window.location.replace(LOGIN_URL);
+      }
+    });
+
+    // Run the check immediately when the script loads
+    initDashboard();
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Device Detection & Body setup
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
@@ -17,15 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set CSS variables
     document.documentElement.style.setProperty('--easing-default', isIOS ? 'var(--easing-ios)' : 'var(--easing-android)');
     document.documentElement.style.setProperty('--shadow-default', isIOS ? 'var(--shadow-soft)' : 'var(--shadow-material)');
-
-    // 2. Auth & Data Parsing
-    const da = await getSessionValue('user');
-    console.log(da);
-    if (!da) {
-        window.location.href = 'login.html';
-        return;
-    }
-
     const parsedData = JSON.parse(userData) || {};
     parsedData.quizzesCompleted = parsedData.quizzesCompleted || 1;
     parsedData.streak = parsedData.streak || 1;
