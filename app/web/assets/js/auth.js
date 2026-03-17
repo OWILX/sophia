@@ -36,6 +36,7 @@ async function checkUser() {
 //  LOGIN BUTTON
 // ────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
+	alert();
   const googleBtn = document.getElementById("google-btn");
   if (!googleBtn) return;
   googleBtn.addEventListener("click", async () => {
