@@ -1,5 +1,32 @@
 // assets/js/quiz.js
+const { createClient } = supabase;
+const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
+const DASHBOARD_URL = "https://owilx.github.io/sophia/app/web/dashboard.html";
+const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
+const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+async function init() {
+      const { data: { session }, error } = await client.auth.getSession();
+      if (error || !session) {
+        // No valid session, kick the user back out
+        console.warn("No active session. Redirecting to login...");
+        window.location.replace(LOGIN_URL);
+        return;
+      }
+    }
+
+    // ────────────────────────────────────────────────
+    //  AUTH STATE LISTENER (Security Guard)
+    // ────────────────────────────────────────────────
+    client.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        window.location.replace(LOGIN_URL);
+      }
+    });
+
+    // Run the check immediately when the script loads
+    init();
 document.addEventListener('DOMContentLoaded', () => {
     /* --------------------------------------------------
        Platform detection & theming
@@ -106,8 +133,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = steps.course.querySelector('.selection-cards');
         container.innerHTML = '<p>Loading courses...</p>';
         try {
-            const res = await fetch('/api/courses.php');
-            const data = await res.json();
+            const { data, error } = await supabase
+          .from('courses')
+          .select('name')
+          .order('id', { ascending: true });   // or false if you want newest first
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p style="color:red"> No courses found. </p>';
+          const courseNames = data.map(row => row.name);
+          return;
+        }
             container.innerHTML = '';
             data.forEach(name => {
                 const card = createCard(name, 'fa-book');
