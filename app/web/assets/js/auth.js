@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.remove("page-exit");
       return;
     }
+    }
 
     // Otherwise → login with Google
     const { error: signInError } = await client.auth.signInWithOAuth({
