@@ -23,7 +23,7 @@ async function checkUser() {
 
   if (error) {
     console.error(error);
-    return;
+    //return;
   }
 
   if (user) {
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       setLoading(googleBtn, false);
       document.body.classList.remove("page-exit");
-      return;
+      window.location.href = DASHBOARD_URL;
     }
 
     // Otherwise → login with Google
