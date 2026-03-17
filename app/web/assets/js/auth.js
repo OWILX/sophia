@@ -1,10 +1,11 @@
 // ────────────────────────────────────────────────
 //  SUPABASE CONFIG
 // ────────────────────────────────────────────────
+
 const { createClient } = supabase;
 const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
-const DASHBOARD_URL = "https://sophia-owilx.netlify.app/app/web/dashboard.html";
+const DASHBOARD_URL = "https://owilx.github.io/sophia/app/web/dashboard.html";
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ────────────────────────────────────────────────
@@ -18,66 +19,51 @@ function setLoading(button, isLoading) {
 // ────────────────────────────────────────────────
 //  CHECK IF USER ALREADY LOGGED IN
 // ────────────────────────────────────────────────
-
 async function checkUser() {
-
   const { data: { session } } = await client.auth.getSession();
-
-  if (!session) return;   // user not logged in
-
-    setTimeout(() => {
-      window.location.href = DASHBOARD_URL;
-    }, 500);
+  
+  if (session) {
+    // If they are already logged in, send them to the dashboard immediately
+    window.location.href = DASHBOARD_URL;
+  }
 }
+
 // ────────────────────────────────────────────────
 //  LOGIN BUTTON
 // ────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   const googleBtn = document.getElementById("google-btn");
   if (!googleBtn) return;
+
   googleBtn.addEventListener("click", async () => {
     setLoading(googleBtn, true);
     document.body.classList.add("page-exit");
-    // small animation delay
+
+    // Small animation delay
     await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Double-check if a session exists right before trying to log in
     const { data: { session } } = await client.auth.getSession();
+    
     if (session) {
-    const { error } = await client.auth.signOut();
-    if (error) {
-      console.error(error);
-      setLoading(googleBtn, false);
-      document.body.classList.remove("page-exit");
-      return;
-    }
+      window.location.href = DASHBOARD_URL;
+      return; // Stop execution here
     }
 
-    // Otherwise → login with Google
+    // Initiate Google OAuth
     const { error: signInError } = await client.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: DASHBOARD_URL
-        // queryParams: { prompt: "select_account" } // optional
+        redirectTo: DASHBOARD_URL 
       }
     });
 
     if (signInError) {
-      console.error(signInError);
+      console.error("OAuth Error:", signInError.message);
       setLoading(googleBtn, false);
       document.body.classList.remove("page-exit");
     }
   });
-
-});
-
-// ────────────────────────────────────────────────
-//  AUTH STATE LISTENER
-// ────────────────────────────────────────────────
-client.auth.onAuthStateChange((event, session) => {
-  console.log("Auth Event:", event, session);
-
-  if (event === "SIGNED_IN") {
-    window.location.href = DASHBOARD_URL;
-  }
 });
 
 // ────────────────────────────────────────────────
