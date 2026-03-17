@@ -3,7 +3,7 @@
 // ────────────────────────────────────────────────
 const { createClient } = supabase;
 const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZW5hb2luY2lianV5ZWpobWFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MDM1NjcsImV4cCI6MjA4OTI3OTU2N30.NS7hQB-q8Ta9WQebR0prb_Cx1OIJjQwKQC6tO3nQQQ0";
+const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
 const DASHBOARD_URL = "https://sophia-owilx.netlify.app/app/web/dashboard.html";
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -18,21 +18,17 @@ function setLoading(button, isLoading) {
 // ────────────────────────────────────────────────
 //  CHECK IF USER ALREADY LOGGED IN
 // ────────────────────────────────────────────────
+
 async function checkUser() {
-  const { data: { user }, error } = await client.auth.getUser();
 
-  if (error) {
-    console.error(error);
-    //return;
-  }
+  const { data: { session } } = await client.auth.getSession();
 
-  if (user) {
+  if (!session) return;   // user not logged in
+
     setTimeout(() => {
       window.location.href = DASHBOARD_URL;
     }, 500);
-  }
 }
-
 // ────────────────────────────────────────────────
 //  LOGIN BUTTON
 // ────────────────────────────────────────────────
