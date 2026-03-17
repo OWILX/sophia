@@ -7,7 +7,7 @@
   135deg,
   color-mix(in srgb, #2dd4bf 25%, white),
   color-mix(in srgb, #22b8a8 25%, white)
-);
+  );
   overflow: hidden;
   display: flex;
   align-items: center;
