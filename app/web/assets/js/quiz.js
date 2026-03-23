@@ -1,5 +1,5 @@
 // assets/js/quiz.js
-import { client } from '../supabase.js';
+import { client } from './supabase.js';
 import { getAllCourses } from './api/courses.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
