@@ -157,24 +157,23 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     async function loadTopics() {
-  const container = steps.course.querySelector('.selection-cards');
+  const container = steps.topic.querySelector('.selection-cards');
   container.innerHTML = '<p>Loading topics...</p>';
 
   try {
-    const topics = await getAllTopics();
+    const topics = await getTopics(selections.course);
 
     if (topics.length === 0) {
-      container.innerHTML = '<p style="color:red">No topics found.</p>';
+      container.innerHTML = `<p style="color:red">No topics found for "${selections.course}".</p>`;
       return;
     }
 
     container.innerHTML = '';
 
     topics.forEach(topic => {
-      const card = createCard(topic.name, 'fa-book');
+      const card = createCard(topic.name, 'fa-book');   // or change icon if you want
       card.addEventListener('click', () => {
-        handleSingleSelect(steps.course, 'topic', topic.name, 'next-to-subtopic');
-        // Tip: later you can easily switch to course.id here if you want stable IDs
+        handleSingleSelect(steps.topic, 'topic', topic.name, 'next-to-subtopic'); // whatever your next step is
       });
       container.appendChild(card);
     });

@@ -1,16 +1,18 @@
 // js/api/topics.js
 import { client } from '../supabase.js';
 
-export async function getAllTopics() {
+export async function getAllTopics(courseName) {
+  if (!courseName?.trim()) {
+    return [];
+  }
   const { data, error } = await client
     .from('topics')
-    .select('id, name')                    // id added for future-proofing (you can remove it if you never need it)
+    .select('name')
+    .eq('courses.name', courseName)   // ← this does the JOIN automatically (same as your PHP)
     .order('id', { ascending: true });
-
   if (error) {
-    console.error('Failed to load courses:', error);
+    console.error('Failed to load topics:', error);
     throw error;
   }
-
   return data ?? [];
 }
