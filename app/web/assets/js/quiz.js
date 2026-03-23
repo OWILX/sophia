@@ -156,23 +156,33 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     async function loadTopics() {
-        const container = steps.topic.querySelector('.selection-cards');
-        container.innerHTML = '<p>Loading topics...</p>';
-        try {
-            const res = await fetch(`/api/topics.php?course=${encodeURIComponent(selections.course)}`);
-            const data = await res.json();
-            container.innerHTML = '';
-            data.forEach(name => {
-                const card = createCard(name, 'fa-folder');
-                card.addEventListener('click', () => {
-                    handleSingleSelect(steps.topic, 'topic', name, 'next-to-subtopic');
-                });
-                container.appendChild(card);
-            });
-        } catch {
-            container.innerHTML = '<p>Error loading topics.</p>';
-        }
+  const container = steps.course.querySelector('.selection-cards');
+  container.innerHTML = '<p>Loading topics...</p>';
+
+  try {
+    const topics = await getAllTopics();
+
+    if (topics.length === 0) {
+      container.innerHTML = '<p style="color:red">No topics found.</p>';
+      return;
     }
+
+    container.innerHTML = '';
+
+    topics.forEach(topic => {
+      const card = createCard(topic.name, 'fa-book');
+      card.addEventListener('click', () => {
+        handleSingleSelect(steps.course, 'topic', topic.name, 'next-to-subtopic');
+        // Tip: later you can easily switch to course.id here if you want stable IDs
+      });
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = '<p style="color:red">Error loading topics</p>';
+  }
+}
 
     async function loadSubtopics() {
         const container = steps.subtopic.querySelector('.selection-cards');
