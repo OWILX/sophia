@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   container.innerHTML = '<p>Loading courses...</p>';
 
   try {
-    const courses = await getAllCourses();   // ← one clean call instead of raw Supabase
+    const courses = await getAllCourses();
 
     if (courses.length === 0) {
       container.innerHTML = '<p style="color:red">No courses found.</p>';
