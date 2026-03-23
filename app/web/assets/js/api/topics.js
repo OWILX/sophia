@@ -1,7 +1,7 @@
 // js/api/topics.js
 import { client } from '../supabase.js';
 
-export async function getAllTopics(courseName) {
+export async function getTopics(courseName) {
   if (!courseName?.trim()) {
     return [];
   }

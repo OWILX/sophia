@@ -1,7 +1,7 @@
 // assets/js/quiz.js
 import { client } from './supabase.js';
 import { getAllCourses } from './api/courses.js';
-import { getAllTopics } from './api/topics.js';
+import { getTopics } from './api/topics.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
 async function init() {
