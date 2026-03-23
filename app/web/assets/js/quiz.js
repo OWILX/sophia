@@ -1,11 +1,8 @@
 // assets/js/quiz.js
-const { createClient } = supabase;
-const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
-const DASHBOARD_URL = "https://owilx.github.io/sophia/app/web/dashboard.html";
+import { client } from '../supabase.js';
+import { getAllCourses } from './api/courses.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
-const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 async function init() {
       const { data: { session }, error } = await client.auth.getSession();
       if (error || !session) {
@@ -130,33 +127,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Data Loading Functions ───────────────────────────
     async function loadCourses() {
-        const container = steps.course.querySelector('.selection-cards');
-        container.innerHTML = '<p>Loading courses...</p>';
-        try {
-            const { data, error } = await supabase
-          .from('courses')
-          .select('name')
-          .order('id', { ascending: true });   // or false if you want newest first
+  const container = steps.course.querySelector('.selection-cards');
+  container.innerHTML = '<p>Loading courses...</p>';
 
-        if (error) throw error;
+  try {
+    const courses = await getAllCourses();   // ← one clean call instead of raw Supabase
 
-        if (!data || data.length === 0) {
-          container.innerHTML = '<p style="color:red"> No courses found. </p>';
-          const courseNames = data.map(row => row.name);
-          return;
-        }
-            container.innerHTML = '';
-            data.forEach(name => {
-                const card = createCard(name, 'fa-book');
-                card.addEventListener('click', () => {
-                    handleSingleSelect(steps.course, 'course', name, 'next-to-topic');
-                });
-                container.appendChild(card);
-            });
-        } catch (err) {
-            container.innerHTML = '<p style="color:red">Error loading courses</p>';
-        }
+    if (courses.length === 0) {
+      container.innerHTML = '<p style="color:red">No courses found.</p>';
+      return;
     }
+
+    container.innerHTML = '';
+
+    courses.forEach(course => {
+      const card = createCard(course.name, 'fa-book');
+      card.addEventListener('click', () => {
+        handleSingleSelect(steps.course, 'course', course.name, 'next-to-topic');
+        // Tip: later you can easily switch to course.id here if you want stable IDs
+      });
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = '<p style="color:red">Error loading courses</p>';
+  }
+}
 
     async function loadTopics() {
         const container = steps.topic.querySelector('.selection-cards');
