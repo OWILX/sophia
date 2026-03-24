@@ -2,6 +2,8 @@
 import { client } from './supabase.js';
 import { getAllCourses } from './api/courses.js';
 import { getTopics } from './api/topics.js';
+import { getSubtopics } from './api/subtopics.js';
+//import { getModules } from './api/modules.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
 async function init() {
@@ -216,15 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = steps.modules.querySelector('.selection-cards');
     container.innerHTML = '<p>Loading modules...</p>';
     try {
-        const params = new URLSearchParams({
-            course: selections.course,
-            topic: selections.topic,
-            subtopic: selections.subtopic
-        });
-        const res = await fetch(`/api/modules.php?${params.toString()}`);
-        const data = await res.json();
+        const modules = await getModules(selections.subtopic);
+
+    if (modules.length === 0) {
+      container.innerHTML = `<p style="color:red">No Modules found for "${selections.topic}".</p>`;
+      return;
+    }
         container.innerHTML = '';
-        data.forEach(module => {
+        modules.forEach(module => {
             const card = createCard(module.name, 'fa-puzzle-piece');
             card.addEventListener('click', () => {
                 const idx = selections.modules.indexOf(module.id);
