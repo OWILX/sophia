@@ -8,7 +8,16 @@ export async function getTopics(courseName) {
   const { data, error } = await client
     .from('topics')
     .select('name')
-    .eq('courses.name', courseName)   // ← this does the JOIN automatically (same as your PHP)
+    .eq('course_id', 
+        // We need the actual course.id, not the name
+        // So we first get the id from courses table
+        (await client
+          .from('courses')
+          .select('id')
+          .eq('name', courseName)
+          .single()
+        ).data?.id
+      )
     .order('id', { ascending: true });
   if (error) {
     console.error('Failed to load topics:', error);
