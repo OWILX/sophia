@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(card);
         });
     } catch {
-        container.innerHTML = '<p>Error loading modules.</p>';
+        container.innerHTML = '<p style="color:red" >Error loading modules.</p>';
     }
 }
 

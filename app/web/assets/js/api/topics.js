@@ -5,7 +5,7 @@ export async function getTopics(courseName) {
   if (!courseName?.trim()) {
     return [];
   }
-  const { data, error } = await supabase
+  const { data, error } = await client
   .from('topics')
   .select(`
     name,
