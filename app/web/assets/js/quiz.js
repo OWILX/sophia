@@ -3,7 +3,7 @@ import { client } from './supabase.js';
 import { getAllCourses } from './api/courses.js';
 import { getTopics } from './api/topics.js';
 import { getSubtopics } from './api/subtopics.js';
-//import { getModules } from './api/modules.js';
+import { getModules } from './api/modules.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
 async function init() {
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     async function loadSubtopics() {
-  const container = steps.topic.querySelector('.selection-cards');
+  const container = steps.subtopic.querySelector('.selection-cards');
   container.innerHTML = '<p>Loading subtopics...</p>';
 
   try {
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modules = await getModules(selections.subtopic);
 
     if (modules.length === 0) {
-      container.innerHTML = `<p style="color:red">No Modules found for "${selections.topic}".</p>`;
+      container.innerHTML = `<p style="color:red">No Modules found for "${selections.subtopic}".</p>`;
       return;
     }
         container.innerHTML = '';
@@ -249,16 +249,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper to create cards dynamically
     function createCard(name, icon) {
-        const card = document.createElement('div');
-        card.className = 'selection-card';
-        card.dataset.value = name;
-        card.innerHTML = `<i class="fas ${icon} card-icon"></i><span>${name}</span>`;
-        return card;
+    const card = document.createElement('div');
+    card.className = 'selection-card';
+    card.dataset.value = name;
+    card.innerHTML = `<i class="fas ${icon} card-icon"></i><span>${name}</span>`;
+    
+    // Add touch interactions here for dynamically created cards
+    if (isAndroid) {
+        card.addEventListener('touchstart', createRipple);
+    } else if (isIOS) {
+        card.addEventListener('touchstart', () => (card.style.backgroundColor = 'var(--gray-100)'));
+        card.addEventListener('touchend', () => (card.style.backgroundColor = ''));
     }
+    
+    return card;
+}
+
 
     function handleSingleSelect(stepEl, key, value, nextBtnId) {
         stepEl.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
-        const selectedCard = stepEl.querySelector(`[data-value="${value}"]`);
+        const selectedCard = stepEl.querySelector(`[data-value="${CSS.escape(value)}"]`);
         if (selectedCard) selectedCard.classList.add('selected');
         selections[key] = value;
         document.getElementById(nextBtnId).disabled = false;
