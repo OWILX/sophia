@@ -1,20 +1,20 @@
 // js/api/modules.js
 import { client } from '../supabase.js';
 
-export async function getModules(coName) {
-  if (!courseName?.trim()) {
+export async function getModules(subtopicName) {
+  if (!subtopicName?.trim()) {
     return [];
   }
-  const { data, error } = await supabase
-  .from('topics')
+  const { data, error } = await client
+  .from('modules')
   .select(`
     name,
-    courses!inner(name)
+    subtopics!inner(name)
   `)
-  .eq('courses.name', courseName)
+  .eq('subtopics.name', subtopicName)
   .order('id', { ascending: true });
   if (error) {
-    console.error('Failed to load topics:', error);
+    console.error('Failed to load modules:', error);
     throw error;
   }
   return data ?? [];
