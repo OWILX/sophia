@@ -185,24 +185,32 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
     async function loadSubtopics() {
-        const container = steps.subtopic.querySelector('.selection-cards');
-        container.innerHTML = '<p>Loading subtopics...</p>';
-        try {
-            const params = new URLSearchParams({ course: selections.course, topic: selections.topic });
-            const res = await fetch(`/api/subtopics.php?${params.toString()}`);
-            const data = await res.json();
-            container.innerHTML = '';
-            data.forEach(name => {
-                const card = createCard(name, 'fa-file');
-                card.addEventListener('click', () => {
-                    handleSingleSelect(steps.subtopic, 'subtopic', name, 'next-to-modules');
-                });
-                container.appendChild(card);
-            });
-        } catch {
-            container.innerHTML = '<p>Error loading subtopics.</p>';
-        }
+  const container = steps.topic.querySelector('.selection-cards');
+  container.innerHTML = '<p>Loading subtopics...</p>';
+
+  try {
+    const subtopics = await getSubtopics(selections.topic);
+
+    if (subtopics.length === 0) {
+      container.innerHTML = `<p style="color:red">No subtopics found for "${selections.topic}".</p>`;
+      return;
     }
+
+    container.innerHTML = '';
+
+    subtopics.forEach(subtopic => {
+      const card = createCard(subtopic.name, 'fa-book');   // or change icon if you want
+      card.addEventListener('click', () => {
+        handleSingleSelect(steps.subtopic, 'subtopic', subtopic.name, 'next-to-modules'); // whatever your next step is
+      });
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = '<p style="color:red">Error loading subtopics</p>';
+  }
+}
 
     async function loadModules() {
     const container = steps.modules.querySelector('.selection-cards');
