@@ -167,7 +167,7 @@ export async function createQuiz(type, modules, num){
   	console.error(budget.error);
       return { ok: false, error: budget.error };
    }
-  console.log(modules, params.num, params.allowedTypes, budget.remaining);
+  console.log(modules, num, params.allowedTypes, budget.remaining);
   const selection = await selectQuestionsForAllModules(
     user.id, modules, params.num, params.allowedTypes, budget.remaining
   );
