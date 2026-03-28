@@ -295,14 +295,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Final Submission ──────────────────────────────────────────
     document.getElementById('start-quiz-btn').addEventListener('click', () => {
-    const data = {
+    /**const data = {
         type: selections.type,
         course: selections.course,
         topic: selections.topic,
         subtopic: selections.subtopic,
         modules: selections.modules,
         num: selections.length
-    };
+    };**/
 
     // Send the POST request in the background
     try{
@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(err){
     	console.err(err);
     }
+    });
 
     // ─── Touch Interactions ───────────────────────────────────────
     const btns = document.querySelectorAll(
