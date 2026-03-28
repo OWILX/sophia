@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('click', () => {
             steps.length.querySelectorAll('.length-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-            selections.length = card.dataset.value;
+            selections.length = Number.parseInt(card.dataset.value);
             document.getElementById('start-quiz-btn').disabled = false;
             updateBreadcrumbs();
         });
