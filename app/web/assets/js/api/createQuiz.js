@@ -27,7 +27,7 @@ function validateQuizParams(userId, type, modules, num) {
     allowedTypes: VALID_QUIZ_TYPES[type] ?? null,
   };
 }
-export async function createQuiz(){
+export async function createQuiz(type, modules, num){
 	const { data: { user } } = await client.auth.getUser();
 
   const { ok, errors, allowedTypes } = validateQuizParams(user?.id, type, modules, num);

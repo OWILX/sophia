@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send the POST request in the background
     try{
-    	const data = await createQuiz();
+    	const data = await createQuiz(selections.type, selections.modules, selections.length);
     } catch(err){
     	console.err(err);
     }
