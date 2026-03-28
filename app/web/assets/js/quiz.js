@@ -4,6 +4,7 @@ import { getAllCourses } from './api/courses.js';
 import { getTopics } from './api/topics.js';
 import { getSubtopics } from './api/subtopics.js';
 import { getModules } from './api/modules.js';
+import { createQuiz } from './api/createQuiz.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 
 async function init() {
@@ -304,27 +305,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Send the POST request in the background
-    fetch('/api/create_quiz.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Tell PHP we are sending JSON
-        },
-        body: JSON.stringify(data)
-    })
-    .then(async response => {
-    const result = await response.json();
-
-    if (response.ok && result.ok) {
-        window.location.href = '/app/quiz.php';
-    } else {
-        console.error(result.error);
+    try{
+    	const data = await createQuiz();
+    } catch(err){
+    	console.err(err);
     }
-})
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-
 
     // ─── Touch Interactions ───────────────────────────────────────
     const btns = document.querySelectorAll(
