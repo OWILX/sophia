@@ -53,7 +53,7 @@ export async function createQuiz(type, modules, num){
 
   if (!params.ok) {
     console.error('Validation failed:', params.errors);
-    return { ok: false, params.errors };
+    return { ok: false, error: params.errors};
   }
   const budget = await getDailyNewBudget(user.id);
   if (!budget.ok){
