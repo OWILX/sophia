@@ -34,6 +34,7 @@ export async function createQuiz(type, modules, num){
 
   if (!ok) {
     console.error('Validation failed:', errors);
+    console.log(num);
     return { ok: false, errors };
   }
 	
