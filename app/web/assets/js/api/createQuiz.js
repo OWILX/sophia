@@ -170,7 +170,7 @@ export async function createQuiz(type, modules, num){
    }
   
   const selection = await selectQuestionsForAllModules(
-    user.id, modules, num, allowedTypes, budget.remaining
+    user.id, modules, params.num, params.allowedTypes, budget.remaining
   );
   console.log(selection);
   if (!selection.ok) return { ok: false, error: selection.error };
