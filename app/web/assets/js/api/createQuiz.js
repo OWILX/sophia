@@ -131,7 +131,7 @@ async function selectQuestionsForAllModules(userId, modules, totalNum, allowedTy
     extra--;
 
     if (limit <= 0) continue;
-    console.log(userId, moduleId, limit, allowedTypes, remainingBudget);
+    console.log(moduleId, limit, allowedTypes, remainingBudget);
     const result = await selectQuestionsForModule(
       userId, moduleId, limit, allowedTypes, remainingBudget
     );
@@ -162,8 +162,8 @@ export async function createQuiz(type, modules, num){
     console.error('Validation failed:', params.errors);
     return { ok: false, error: params.errors};
   }
+  console.log(modules, params.num, params.allowedTypes, budget.remaining);
   const budget = await getDailyNewBudget(user.id);
-  console.log(budget);
   if (!budget.ok){
   	console.error(budget.error);
       return { ok: false, error: budget.error };
