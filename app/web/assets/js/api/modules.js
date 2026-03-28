@@ -8,7 +8,7 @@ export async function getModules(subtopicName) {
   const { data, error } = await client
   .from('modules')
   .select(`
-    name,
+    id,name,
     subtopics!inner(name)
   `)
   .eq('subtopics.name', subtopicName)
