@@ -49,7 +49,7 @@ export async function getDailyNewBudget(userId) {
 async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
   const today = new Date().toISOString().split('T')[0];
   const collected = new Set();
-
+  
   // --- Step 1: Due questions (spaced repetition, highest priority) ---
   if (collected.size < limit) {
     const { data, error } = await client
@@ -131,7 +131,7 @@ async function selectQuestionsForAllModules(userId, modules, totalNum, allowedTy
     extra--;
 
     if (limit <= 0) continue;
-
+    console.log(userId, moduleId, limit, allowedTypes, remainingBudget);
     const result = await selectQuestionsForModule(
       userId, moduleId, limit, allowedTypes, remainingBudget
     );
