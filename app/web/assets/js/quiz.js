@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Final Submission ──────────────────────────────────────────
-    document.getElementById('start-quiz-btn').addEventListener('click', () => {
+    document.getElementById('start-quiz-btn').addEventListener('click', async () => {
     /**const data = {
         type: selections.type,
         course: selections.course,
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try{
     	const data = await createQuiz(selections.type, selections.modules, selections.length);
     } catch(err){
-    	console.err(err);
+    	console.error(err);
     }
     });
 
