@@ -30,7 +30,7 @@ function validateQuizParams(userId, type, modules, num) {
 
 const DAILY_NEW_LIMIT = 25;
 
-export async function getDailyNewBudget(userId) {
+async function getDailyNewBudget(userId) {
   const today = new Date().toISOString().split('T')[0];
 
   // 1. Try to fetch existing record for today
@@ -68,13 +68,26 @@ export async function getDailyNewBudget(userId) {
   return { ok: true, remaining, used };
 }
 
-
-async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
+export async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
   const today = new Date().toISOString().split('T')[0];
   const collected = new Set();
   
+  // --- PRE-FETCH: Get ALL seen question IDs for this user & module ---
+  // This gracefully handles new users (returns empty array) and fixes the LEFT JOIN flaw.
+  const { data: progressData, error: progressError } = await client
+    .from('questions')
+    .select('id, user_question_progress!inner(question_id)')
+    .eq('module_id', moduleId)
+    .eq('user_question_progress.user_id', userId)
+    .limit(2);
+
+  if (progressError) return { ok: false, error: progressError.message };
+  
+  // Map out the IDs the user has already encountered
+  const seenIds = progressData.map(q => q.id);
+
   // --- Step 1: Due questions (spaced repetition, highest priority) ---
-  if (collected.size < limit) {
+  if (collected.size < limit && seenIds.length > 0) {
     const { data, error } = await client
       .from('questions')
       .select('id, user_question_progress!inner(next_review_date)')
@@ -94,49 +107,61 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
   let newlySeenIds = [];
 
   if (newSlots > 0) {
-    const { data, error } = await client
+    let query = client
       .from('questions')
-      .select('id, user_question_progress(question_id, first_seen)')
+      .select('id')
       .eq('module_id', moduleId)
       .in('question_type', allowedTypes)
-      .or('user_question_progress.question_id.is.null,user_question_progress.first_seen.is.null')
       .order('random_key')
       .limit(newSlots);
 
+    // Only apply the 'not in' filter if they have actually seen questions.
+    // This prevents the empty array '()' syntax error.
+    if (seenIds.length > 0) {
+      query = query.not('id', 'in', `(${seenIds.join(',')})`);
+    }
+
+    const { data, error } = await query;
     if (error) return { ok: false, error: error.message };
 
-    const fresh = data
-      .filter(q => !collected.has(q.id))
-      .map(q => q.id);
-
-    fresh.forEach(id => collected.add(id));
-    newlySeenIds = fresh;
+    data.forEach(q => {
+      if (!collected.has(q.id)) {
+        collected.add(q.id);
+        newlySeenIds.push(q.id);
+      }
+    });
   }
 
   // --- Step 3: Filler (not yet due, only if still under limit) ---
-  if (collected.size < limit) {
+  if (collected.size < limit && seenIds.length > 0) {
     const needed = limit - collected.size;
     const exclude = [...collected];
 
-    const { data, error } = await client
+    let query = client
       .from('questions')
       .select('id, user_question_progress!inner(next_review_date)')
       .eq('module_id', moduleId)
       .eq('user_question_progress.user_id', userId)
       .in('question_type', allowedTypes)
       .gt('user_question_progress.next_review_date', today)
-      .not('id', 'in', `(${exclude.join(',')})`)
       .order('random_key')
       .limit(needed);
 
+    // Safely exclude collected items
+    if (exclude.length > 0) {
+      query = query.not('id', 'in', `(${exclude.join(',')})`);
+    }
+
+    const { data, error } = await query;
     if (error) return { ok: false, error: error.message };
+    
     data.forEach(q => collected.add(q.id));
   }
 
   return {
     ok:           true,
     questionIds:  [...collected].slice(0, limit),
-    newlySeenIds,                                   // only the Step 2 IDs, needed for progress insert
+    newlySeenIds,
   };
 }
 
@@ -154,8 +179,7 @@ async function selectQuestionsForAllModules(userId, modules, totalNum, allowedTy
     extra--;
 
     if (limit <= 0) continue;
-    console.log(base,extra);
-    console.log(moduleId, limit, allowedTypes, remainingBudget);
+    
     const result = await selectQuestionsForModule(
       userId, moduleId, limit, allowedTypes, remainingBudget
     );
