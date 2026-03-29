@@ -61,7 +61,20 @@ async function getDailyNewBudget(userId) {
     console.error("Error syncing daily budget:", error.message);
     return { ok: false, error: error.message };
   }
+async function incrementDailyBudget(userId, amount) {
+  if (amount <= 0) return { ok: true };
 
+  const today = new Date().toISOString().split('T')[0];
+
+  const { error } = await client.rpc('increment_daily_new_questions', {
+    p_user_id: userId,
+    p_date:    today,
+    p_amount:  amount,
+  });
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
   const used = data?.new_count ?? 0;
   const remaining = Math.max(0, DAILY_NEW_LIMIT - used);
 
@@ -79,7 +92,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
     .select('id, user_question_progress!inner(question_id)')
     .eq('module_id', moduleId)
     .eq('user_question_progress.user_id', userId)
-    .limit(2);
+    .limit(DAILY_NEW_LIMIT);
 
   if (progressError) return { ok: false, error: progressError.message, step: "prefetch step" };
   
@@ -201,6 +214,57 @@ async function selectQuestionsForAllModules(userId, modules, totalNum, allowedTy
   };
 }
 
+async function insertProgressForNewQuestions(userId, newlySeenIds) {
+  if (newlySeenIds.length === 0) return { ok: true };
+
+  const today    = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+  // Fetch module_id for each question directly from the source
+  const { data, error } = await client
+    .from('questions')
+    .select('id, module_id')
+    .in('id', newlySeenIds);
+
+  if (error) return { ok: false, error: error.message };
+
+  const records = data.map(q => ({
+    user_id:          userId,
+    question_id:      q.id,
+    module_id:        q.module_id,
+    first_seen:       today,
+    next_review_date: tomorrow,
+    interval_days:    1,
+  }));
+
+  const { error: upsertError } = await client
+    .from('user_question_progress')
+    .upsert(records, {
+      onConflict:       'user_id,question_id',
+      ignoreDuplicates: true,
+    });
+
+  if (upsertError) return { ok: false, error: upsertError.message };
+  return { ok: true };
+}
+
+
+async function saveQuiz(userId, type, questionIds) {
+  const { data, error } = await client
+    .from('quizzes')
+    .insert({
+      user_id:         userId,
+      quiz_type:       type,
+      total_questions: questionIds.length,
+      question_ids:    questionIds,
+    })
+    .select('id')
+    .single();
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, quizId: data.id };
+}
+
 export async function createQuiz(type, modules, num){
 	const { data: { user } } = await client.auth.getUser();
 
@@ -221,5 +285,17 @@ export async function createQuiz(type, modules, num){
   console.log(selection);
   if (!selection.ok) return { ok: false, error: selection.error };
   
-	
+  const progressResult = await insertProgressForNewQuestions(
+  user.id, selection.newlySeenIds
+  );
+  if (!progressResult.ok) return { ok: false, error: progressResult.error };
+
+  // 5. Increment daily budget
+  const budgetResult = await incrementDailyBudget(user.id, selection.newlySeenIds.length);
+  if (!budgetResult.ok) return { ok: false, error: budgetResult.error };
+  
+  const quiz = await saveQuiz(user.id, type, selection.questionIds);
+  if (!quiz.ok) return { ok: false, error: quiz.error };
+
+  return { ok: true, quizId: quiz.quizId };
 }
