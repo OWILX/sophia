@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sophia Quiz - In Progress</title>
+    <link rel="stylesheet" href="assets/css/quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .quiz-body {
+            background: var(--gray-50);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+            padding-bottom: 100px;
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--gray-700);
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(45, 212, 191, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            color: var(--gray-800);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 1.05rem;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+            background: rgba(45, 212, 191, 0.05);
+        }
+
+        .option-label input {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .primary-btn, .secondary-btn {
+            padding: 0.9rem 1.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary), #20b2aa);
+            color: white;
+            border: none;
+        }
+
+        .secondary-btn {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            border: none;
+        }
+
+        .option-label.correct {
+            background: rgba(0, 200, 100, 0.15);
+            border-color: #00c864;
+        }
+
+        .option-label.incorrect {
+            background: rgba(255, 80, 80, 0.15);
+            border-color: #ff5050;
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f0faff;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .submitted .explanation {
+            display: block;
+        }
+
+        .q-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .q-number.answered {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .q-number.current {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
+        }
+
+        .tf-option {
+            font-size: 1.3rem;
+            padding: 1.4rem;
+            justify-content: center;
+        }
+
+        .results-screen h1 { color: var(--primary); }
+
+        .hidden { display: none !important; }
+
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            gap: 1rem;
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        #error-screen {
+            display: none;
+            padding: 2rem;
+            background: #fff5f5;
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="quiz-body">
+
+<div class="quiz-container">
+
+    <!-- Loading state -->
+    <div id="loading-screen">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <span>Loading quiz...</span>
+    </div>
+
+    <!-- Error state -->
+    <div id="error-screen"></div>
+
+    <!-- Quiz UI (hidden until loaded) -->
+    <div id="quiz-ui" class="hidden">
+        <div class="quiz-header">
+            <div>Question <span id="current">1</span>/<span id="total"></span></div>
+            <div id="timer">00:00</div>
+        </div>
+
+        <div id="question-card" class="question-card"></div>
+
+        <div class="nav-buttons">
+            <button class="secondary-btn" id="prev">Previous</button>
+            <button class="secondary-btn" id="next">Next</button>
+            <button class="primary-btn hidden" id="submit">Submit Quiz</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+
+// ─────────────────────────────────────────────
+//  Import Supabase Client
+// ─────────────────────────────────────────────
+import { client } from './assets/js/supabase.js';
+// ─────────────────────────────────────────────
+//  Bootstrap
+// ─────────────────────────────────────────────
+const quizId = localStorage.getItem('current_quiz_id');
+
+if (!quizId) {
+    showError('No quiz found. Please start a new quiz.');
+} else {
+    init();
+}
+
+async function init() {
+    const { data: { user }, error: authError } = await client.auth.getUser();
+
+    if (authError || !user) {
+        showError('You must be logged in to take a quiz.');
+        console.warn("User not logged in...");
+        window.location.replace(LOGIN_URL);
+        return;
+    }
+
+    // Fetch quiz record
+    const { data: quiz, error: quizError } = await client
+        .from('quizzes')
+        .select('question_ids')
+        .eq('id', quizId)
+        .eq('user_id', user.id)
+        .single();
+
+    if (quizError || !quiz) {
+        showError('Quiz not found or access denied.');
+        return;
+    }
+
+    const questionIds = quiz.question_ids;
+
+    if (!Array.isArray(questionIds) || questionIds.length === 0) {
+        showError('No questions found in this quiz.');
+        return;
+    }
+
+    // Fetch questions
+    const { data: rows, error: qError } = await client
+        .from('questions')
+        .select('id, question_type, question_data')
+        .in('id', questionIds);
+
+    if (qError || !rows) {
+        showError('Failed to load questions.');
+        return;
+    }
+
+    // Re-order rows to match the original question_ids order
+    const rowMap = Object.fromEntries(rows.map(r => [r.id, r]));
+    const questions = questionIds
+        .map(id => rowMap[id])
+        .filter(Boolean)
+        .map(normalizeQuestion);
+
+    startQuiz(user.id, questions);
+}
+
+// ─────────────────────────────────────────────
+//  Normalize a raw DB row into a usable object
+// ─────────────────────────────────────────────
+function normalizeQuestion(row) {
+    const data  = row.question_data ?? {};
+    const type  = (row.question_type ?? '').toLowerCase();
+
+    const options = data.options ?? (type === 'tf' ? ['True', 'False'] : []);
+    const answer  = (data.answer ?? '').toUpperCase();
+
+    let correct_index;
+    if (type === 'tf') {
+        correct_index = (answer === 'T' || answer === 'TRUE') ? 0 : 1;
+    } else {
+        correct_index = Math.max(0, answer.charCodeAt(0) - 'A'.charCodeAt(0));
+    }
+
+    return {
+        id:           row.id,
+        type,
+        statement:    data.statement ?? data.question ?? '',
+        explanation:  data.explanation ?? '',
+        options,
+        correct_index,
+    };
+}
+
+// ─────────────────────────────────────────────
+//  Quiz logic
+// ─────────────────────────────────────────────
+function startQuiz(userId, questions) {
+    const KEY = `quiz_${quizId}_`;
+
+    let quizSubmitted = false;
+    let currentIndex  = parseInt(localStorage.getItem(KEY + 'currentIndex')) || 0;
+    let answers       = JSON.parse(localStorage.getItem(KEY + 'answers')) || {};
+    let time          = parseInt(localStorage.getItem(KEY + 'time')) || 0;
+    let timerInterval;
+
+    const questionCard = document.getElementById('question-card');
+    const currentEl    = document.getElementById('current');
+    const totalEl      = document.getElementById('total');
+    const prevBtn      = document.getElementById('prev');
+    const nextBtn      = document.getElementById('next');
+    const submitBtn    = document.getElementById('submit');
+
+    totalEl.textContent = questions.length;
+
+    // Show quiz UI
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('quiz-ui').classList.remove('hidden');
+
+    // ── Persistence ──────────────────────────
+    function saveProgress() {
+        localStorage.setItem(KEY + 'currentIndex', currentIndex);
+        localStorage.setItem(KEY + 'answers',      JSON.stringify(answers));
+        localStorage.setItem(KEY + 'time',         time);
+    }
+
+    // ── Navigator ────────────────────────────
+    function renderNavigator() {
+        let html = '<div class="question-navigator" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.5rem; justify-content:center;">';
+
+        questions.forEach((q, i) => {
+            const answered  = answers[q.id] !== undefined;
+            const isCurrent = i === currentIndex;
+            let cls = 'q-number';
+            if (answered)  cls += ' answered';
+            if (isCurrent) cls += ' current';
+            html += `<button class="${cls}" data-index="${i}">${i + 1}</button>`;
+        });
+
+        html += '</div>';
+
+        const container = document.querySelector('.quiz-container');
+        container.querySelector('.question-navigator')?.remove();
+        container.insertAdjacentHTML('afterbegin', html);
+
+        container.querySelectorAll('.q-number').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentIndex = parseInt(btn.dataset.index);
+                renderQuestion();
+                saveProgress();
+            });
+        });
+    }
+
+    // ── Question renderer ────────────────────
+    function renderQuestion() {
+        const q    = questions[currentIndex];
+        const isTF = q.type === 'tf';
+
+        let html = `<p class="question-text">${escapeHtml(q.statement)}</p>`;
+        html += '<div class="options">';
+
+        const displayOptions = isTF ? ['True', 'False'] : q.options;
+
+        displayOptions.forEach((opt, i) => {
+            const selected = answers[q.id] === i;
+            let cls = 'option-label' + (isTF ? ' tf-option' : '');
+
+            if (quizSubmitted) {
+                if (i === q.correct_index)       cls += ' correct';
+                else if (selected)               cls += ' incorrect';
+            }
+
+            const label = isTF ? opt : `${String.fromCharCode(65 + i)}. ${opt}`;
+
+            html += `
+                <label class="${cls}">
+                    <input type="radio" name="q${q.id}" value="${i}" ${selected ? 'checked' : ''}>
+                    <span>${escapeHtml(label)}</span>
+                </label>`;
+        });
+
+        html += '</div>';
+
+        if (answers[q.id] !== undefined) {
+            html += `
+                <div class="explanation" style="display:block;">
+                    <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation available')}
+                </div>`;
+        }
+
+        questionCard.innerHTML = html;
+        currentEl.textContent  = currentIndex + 1;
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.classList.toggle('hidden',   currentIndex === questions.length - 1);
+        submitBtn.classList.toggle('hidden', currentIndex !== questions.length - 1);
+
+        // Answer listener
+        questionCard.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', e => {
+                answers[q.id] = parseInt(e.target.value);
+                saveProgress();
+                renderQuestion();
+                renderNavigator();
+            });
+        });
+
+        renderNavigator();
+    }
+
+    // ── Timer ────────────────────────────────
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            time++;
+            const mins = String(Math.floor(time / 60)).padStart(2, '0');
+            const secs = String(time % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = `${mins}:${secs}`;
+            saveProgress();
+        }, 1000);
+    }
+
+    // ── Navigation ───────────────────────────
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion();
+            saveProgress();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            renderQuestion();
+            saveProgress();
+        }
+    });
+
+    submitBtn.addEventListener('click', () => {
+        quizSubmitted = true;
+        showResults();
+    });
+
+    // ── Results ──────────────────────────────
+    async function showResults() {
+        clearInterval(timerInterval);
+
+        let score = 0;
+        const wrong = [];
+
+        questions.forEach((q, idx) => {
+            const userAns = answers[q.id];
+            if (userAns === q.correct_index) {
+                score++;
+            } else if (userAns !== undefined) {
+                wrong.push({ q, idx, userAns });
+            }
+        });
+
+        let html = `
+            <div class="results-screen">
+                <h1>Quiz Complete!</h1>
+                <p style="font-size:2.2rem;">
+                    Score: <strong>${score} / ${questions.length}</strong>
+                </p>
+                <p>Time: <strong>${document.getElementById('timer').textContent}</strong></p>`;
+
+        if (wrong.length > 0) {
+            html += `<h2>Review Wrong Answers</h2>`;
+            wrong.forEach(({ q, idx, userAns }) => {
+                const isTF   = q.type === 'tf';
+                const userStr = isTF ? (userAns === 0 ? 'True' : 'False') : String.fromCharCode(65 + userAns);
+                const corrStr = isTF ? (q.correct_index === 0 ? 'True' : 'False') : String.fromCharCode(65 + q.correct_index);
+
+                html += `
+                    <div style="margin:1.5rem 0; padding:1.2rem; background:#fff5f5; border-left:4px solid #ef4444; border-radius:8px;">
+                        <strong>Question ${idx + 1}:</strong><br>
+                        ${escapeHtml(q.statement)}<br><br>
+                        <strong>Your answer:</strong> <span style="color:#ef4444;">${userStr}</span><br>
+                        <strong>Correct:</strong> <span style="color:#10b981;">${corrStr}</span><br><br>
+                        <strong>Explanation:</strong> ${escapeHtml(q.explanation || '—')}
+                    </div>`;
+            });
+        } else {
+            html += '<p style="color:#10b981; font-weight:600;">Perfect score! Great job.</p>';
+        }
+
+        html += '</div>';
+        questionCard.innerHTML = html;
+        prevBtn.style.display = nextBtn.style.display = submitBtn.style.display = 'none';
+
+        // SRS update — placeholder for submit_quiz module (to be built)
+        const { error } = await client.rpc('submit_quiz_results', {
+            p_quiz_id:   quizId,
+            p_answers:   answers,
+            p_time_taken: time,
+        });
+
+        if (error) console.warn('SRS update failed:', error.message);
+
+        // Clear local progress
+        localStorage.removeItem(KEY + 'currentIndex');
+        localStorage.removeItem(KEY + 'answers');
+        localStorage.removeItem(KEY + 'time');
+    }
+
+    // ── Start ────────────────────────────────
+    renderQuestion();
+    startTimer();
+}
+
+// ─────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function showError(msg) {
+    document.getElementById('loading-screen').style.display = 'none';
+    const el = document.getElementById('error-screen');
+    el.style.display = 'block';
+    el.textContent = msg;
+}
+
+</script>
+</body>
+</html>

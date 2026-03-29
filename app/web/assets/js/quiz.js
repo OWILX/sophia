@@ -6,6 +6,7 @@ import { getSubtopics } from './api/subtopics.js';
 import { getModules } from './api/modules.js';
 import { createQuiz } from './api/createQuiz.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
+const QUIZ_URL = "https://owilx.github.io/sophia/app/web/start_quiz.html";
 
 async function init() {
       const { data: { session }, error } = await client.auth.getSession();
@@ -309,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     	const quiz = await createQuiz(selections.type, selections.modules, selections.length);
         if(quiz.ok){
             localStorage.setItem('current_quiz_id', quiz.quizId);
+            window.location.replace(QUIZ_URL);
         }
     } catch(err){
     	console.error(err);
