@@ -61,6 +61,7 @@ async function getDailyNewBudget(userId) {
     console.error("Error syncing daily budget:", error.message);
     return { ok: false, error: error.message };
   }
+  }
 async function incrementDailyBudget(userId, amount) {
   if (amount <= 0) return { ok: true };
 
@@ -91,8 +92,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
     .from('questions')
     .select('id, user_question_progress!inner(question_id)')
     .eq('module_id', moduleId)
-    .eq('user_question_progress.user_id', userId)
-    .limit(DAILY_NEW_LIMIT);
+    .eq('user_question_progress.user_id', userId);
 
   if (progressError) return { ok: false, error: progressError.message, step: "prefetch step" };
   
@@ -131,7 +131,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
     // Only apply the 'not in' filter if they have actually seen questions.
     // This prevents the empty array '()' syntax error.
     if (seenIds.length > 0) {
-      query = query.not('id', 'in', `(${seenIds.join(',')})`);
+    query = query.not('id', 'in', seenIds);  // ← pass array directly
     }
 
     const { data, error } = await query;
@@ -162,7 +162,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
 
     // Safely exclude collected items
     if (exclude.length > 0) {
-      query = query.not('id', 'in', `(${exclude.join(',')})`);
+      query = query.not('id', 'in', exclude);
     }
 
     const { data, error } = await query;
@@ -208,10 +208,11 @@ async function selectQuestionsForAllModules(userId, modules, totalNum, allowedTy
     return { ok: false, error: 'No questions available' };
 
   return {
-    ok:           true,
-    questionIds:  allQuestionIds,
-    newlySeenIds: allNewlySeenIds,
-  };
+  ok: true,
+  questionIds: allQuestionIds.toSorted(() => Math.random() - 0.5),
+  newlySeenIds: allNewlySeenIds,
+};
+
 }
 
 async function insertProgressForNewQuestions(userId, newlySeenIds) {
@@ -288,13 +289,16 @@ export async function createQuiz(type, modules, num){
   const progressResult = await insertProgressForNewQuestions(
   user.id, selection.newlySeenIds
   );
+  console.log(progressResult);
   if (!progressResult.ok) return { ok: false, error: progressResult.error };
 
   // 5. Increment daily budget
   const budgetResult = await incrementDailyBudget(user.id, selection.newlySeenIds.length);
+  console.log(budgetResult);
   if (!budgetResult.ok) return { ok: false, error: budgetResult.error };
   
   const quiz = await saveQuiz(user.id, type, selection.questionIds);
+  console.log(quiz);
   if (!quiz.ok) return { ok: false, error: quiz.error };
 
   return { ok: true, quizId: quiz.quizId };
