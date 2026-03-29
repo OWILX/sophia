@@ -74,6 +74,36 @@
             height: 20px;
         }
 
+        /* During review: lock pointer events so user can't change answers */
+        .option-label.locked {
+            pointer-events: none;
+        }
+
+        .option-label.correct {
+            background: rgba(0, 200, 100, 0.15);
+            border-color: #00c864;
+        }
+
+        .option-label.incorrect {
+            background: rgba(255, 80, 80, 0.15);
+            border-color: #ff5050;
+        }
+
+        /* Skipped question in review */
+        .option-label.skipped-correct {
+            background: rgba(0, 200, 100, 0.08);
+            border-color: #00c864;
+            border-style: dashed;
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f0faff;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+        }
+
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -99,29 +129,12 @@
             border: none;
         }
 
-        .option-label.correct {
-            background: rgba(0, 200, 100, 0.15);
-            border-color: #00c864;
+        .primary-btn:disabled, .secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .option-label.incorrect {
-            background: rgba(255, 80, 80, 0.15);
-            border-color: #ff5050;
-        }
-
-        .explanation {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #f0faff;
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            display: none;
-        }
-
-        .submitted .explanation {
-            display: block;
-        }
-
+        /* ── Navigator ── */
         .q-number {
             width: 36px;
             height: 36px;
@@ -139,6 +152,25 @@
             border-color: #4caf50;
         }
 
+        /* Review navigator states */
+        .q-number.review-correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .q-number.review-wrong {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .q-number.review-skipped {
+            background: #d1d5db;
+            color: #374151;
+            border-color: #9ca3af;
+        }
+
         .q-number.current {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3);
@@ -150,6 +182,96 @@
             justify-content: center;
         }
 
+        /* ── Score screen ── */
+        .score-screen {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .score-screen h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin: 1rem 0;
+        }
+
+        .score-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .score-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .score-stat span:first-child {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .score-stat span:last-child {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-correct  { color: #10b981; }
+        .stat-wrong    { color: #ef4444; }
+        .stat-skipped  { color: #9ca3af; }
+
+        /* ── Rating buttons ── */
+        .rating-row {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            opacity: 0.6;
+        }
+
+        .rating-btn.selected {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .rating-btn.again { background: #fef2f2; color: #ef4444; border-color: #fca5a5; }
+        .rating-btn.hard  { background: #fffbeb; color: #f59e0b; border-color: #fcd34d; }
+        .rating-btn.good  { background: #f0fdf4; color: #10b981; border-color: #6ee7b7; }
+        .rating-btn.easy  { background: #eff6ff; color: #3b82f6; border-color: #93c5fd; }
+
+        .rating-btn.again.selected { background: #ef4444; color: white; }
+        .rating-btn.hard.selected  { background: #f59e0b; color: white; }
+        .rating-btn.good.selected  { background: #10b981; color: white; }
+        .rating-btn.easy.selected  { background: #3b82f6; color: white; }
+
+        .rating-label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+        }
+
+        /* ── Misc ── */
         .results-screen h1 { color: var(--primary); }
 
         .hidden { display: none !important; }
@@ -210,10 +332,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module">
 
-// ─────────────────────────────────────────────
-//  Import Supabase Client
-// ─────────────────────────────────────────────
-import { client } from './assets/js/supabase.js';
+import { client }          from './assets/js/supabase.js';
+import { submitSRSUpdate } from './assets/js/api/srsUpdater.js';
+
 // ─────────────────────────────────────────────
 //  Bootstrap
 // ─────────────────────────────────────────────
@@ -230,12 +351,10 @@ async function init() {
 
     if (authError || !user) {
         showError('You must be logged in to take a quiz.');
-        console.warn("User not logged in...");
-        window.location.replace(LOGIN_URL);
+        console.warn('User not logged in...');
         return;
     }
 
-    // Fetch quiz record
     const { data: quiz, error: quizError } = await client
         .from('quizzes')
         .select('question_ids')
@@ -255,7 +374,6 @@ async function init() {
         return;
     }
 
-    // Fetch questions
     const { data: rows, error: qError } = await client
         .from('questions')
         .select('id, question_type, question_data')
@@ -266,8 +384,8 @@ async function init() {
         return;
     }
 
-    // Re-order rows to match the original question_ids order
-    const rowMap = Object.fromEntries(rows.map(r => [r.id, r]));
+    // Preserve the original question order from question_ids
+    const rowMap    = Object.fromEntries(rows.map(r => [r.id, r]));
     const questions = questionIds
         .map(id => rowMap[id])
         .filter(Boolean)
@@ -277,11 +395,11 @@ async function init() {
 }
 
 // ─────────────────────────────────────────────
-//  Normalize a raw DB row into a usable object
+//  Normalize raw DB row
 // ─────────────────────────────────────────────
 function normalizeQuestion(row) {
-    const data  = row.question_data ?? {};
-    const type  = (row.question_type ?? '').toLowerCase();
+    const data = row.question_data ?? {};
+    const type = (row.question_type ?? '').toLowerCase();
 
     const options = data.options ?? (type === 'tf' ? ['True', 'False'] : []);
     const answer  = (data.answer ?? '').toUpperCase();
@@ -294,10 +412,10 @@ function normalizeQuestion(row) {
     }
 
     return {
-        id:           row.id,
+        id:          row.id,
         type,
-        statement:    data.statement ?? data.question ?? '',
-        explanation:  data.explanation ?? '',
+        statement:   data.statement ?? data.question ?? '',
+        explanation: data.explanation ?? '',
         options,
         correct_index,
     };
@@ -309,10 +427,12 @@ function normalizeQuestion(row) {
 function startQuiz(userId, questions) {
     const KEY = `quiz_${quizId}_`;
 
-    let quizSubmitted = false;
-    let currentIndex  = parseInt(localStorage.getItem(KEY + 'currentIndex')) || 0;
-    let answers       = JSON.parse(localStorage.getItem(KEY + 'answers')) || {};
-    let time          = parseInt(localStorage.getItem(KEY + 'time')) || 0;
+    // ── Phases: 'taking' | 'review' ──
+    let phase        = 'taking';
+    let currentIndex = parseInt(localStorage.getItem(KEY + 'currentIndex')) || 0;
+    let answers      = JSON.parse(localStorage.getItem(KEY + 'answers')) || {};
+    let time         = parseInt(localStorage.getItem(KEY + 'time')) || 0;
+    let qualities    = {};   // { [questionId]: 'again'|'hard'|'good'|'easy' }
     let timerInterval;
 
     const questionCard = document.getElementById('question-card');
@@ -324,27 +444,44 @@ function startQuiz(userId, questions) {
 
     totalEl.textContent = questions.length;
 
-    // Show quiz UI
     document.getElementById('loading-screen').style.display = 'none';
     document.getElementById('quiz-ui').classList.remove('hidden');
 
-    // ── Persistence ──────────────────────────
+    // ─────────────────────────────────────────
+    //  Persistence
+    // ─────────────────────────────────────────
     function saveProgress() {
         localStorage.setItem(KEY + 'currentIndex', currentIndex);
         localStorage.setItem(KEY + 'answers',      JSON.stringify(answers));
         localStorage.setItem(KEY + 'time',         time);
     }
 
-    // ── Navigator ────────────────────────────
+    function clearProgress() {
+        localStorage.removeItem(KEY + 'currentIndex');
+        localStorage.removeItem(KEY + 'answers');
+        localStorage.removeItem(KEY + 'time');
+    }
+
+    // ─────────────────────────────────────────
+    //  Navigator
+    // ─────────────────────────────────────────
     function renderNavigator() {
         let html = '<div class="question-navigator" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.5rem; justify-content:center;">';
 
         questions.forEach((q, i) => {
-            const answered  = answers[q.id] !== undefined;
-            const isCurrent = i === currentIndex;
             let cls = 'q-number';
-            if (answered)  cls += ' answered';
-            if (isCurrent) cls += ' current';
+
+            if (phase === 'taking') {
+                if (answers[q.id] !== undefined) cls += ' answered';
+            } else {
+                // Review: colour by correctness
+                const userAns = answers[q.id];
+                if (userAns === undefined)         cls += ' review-skipped';
+                else if (userAns === q.correct_index) cls += ' review-correct';
+                else                               cls += ' review-wrong';
+            }
+
+            if (i === currentIndex) cls += ' current';
             html += `<button class="${cls}" data-index="${i}">${i + 1}</button>`;
         });
 
@@ -357,13 +494,15 @@ function startQuiz(userId, questions) {
         container.querySelectorAll('.q-number').forEach(btn => {
             btn.addEventListener('click', () => {
                 currentIndex = parseInt(btn.dataset.index);
-                renderQuestion();
+                phase === 'taking' ? renderQuestion() : renderReviewQuestion();
                 saveProgress();
             });
         });
     }
 
-    // ── Question renderer ────────────────────
+    // ─────────────────────────────────────────
+    //  PHASE 1 — Taking: render question, no feedback
+    // ─────────────────────────────────────────
     function renderQuestion() {
         const q    = questions[currentIndex];
         const isTF = q.type === 'tf';
@@ -375,14 +514,8 @@ function startQuiz(userId, questions) {
 
         displayOptions.forEach((opt, i) => {
             const selected = answers[q.id] === i;
-            let cls = 'option-label' + (isTF ? ' tf-option' : '');
-
-            if (quizSubmitted) {
-                if (i === q.correct_index)       cls += ' correct';
-                else if (selected)               cls += ' incorrect';
-            }
-
-            const label = isTF ? opt : `${String.fromCharCode(65 + i)}. ${opt}`;
+            const cls      = 'option-label' + (isTF ? ' tf-option' : '');
+            const label    = isTF ? opt : `${String.fromCharCode(65 + i)}. ${opt}`;
 
             html += `
                 <label class="${cls}">
@@ -393,13 +526,6 @@ function startQuiz(userId, questions) {
 
         html += '</div>';
 
-        if (answers[q.id] !== undefined) {
-            html += `
-                <div class="explanation" style="display:block;">
-                    <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation available')}
-                </div>`;
-        }
-
         questionCard.innerHTML = html;
         currentEl.textContent  = currentIndex + 1;
 
@@ -407,12 +533,10 @@ function startQuiz(userId, questions) {
         nextBtn.classList.toggle('hidden',   currentIndex === questions.length - 1);
         submitBtn.classList.toggle('hidden', currentIndex !== questions.length - 1);
 
-        // Answer listener
         questionCard.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', e => {
                 answers[q.id] = parseInt(e.target.value);
                 saveProgress();
-                renderQuestion();
                 renderNavigator();
             });
         });
@@ -420,7 +544,236 @@ function startQuiz(userId, questions) {
         renderNavigator();
     }
 
-    // ── Timer ────────────────────────────────
+    // ─────────────────────────────────────────
+    //  PHASE 2 — Score screen
+    // ─────────────────────────────────────────
+    function showScoreScreen() {
+        clearInterval(timerInterval);
+
+        let correct = 0, wrong = 0, skipped = 0;
+
+        questions.forEach(q => {
+            const userAns = answers[q.id];
+            if (userAns === undefined)            skipped++;
+            else if (userAns === q.correct_index) correct++;
+            else                                  wrong++;
+        });
+
+        // Default qualities — user can override in review
+        questions.forEach(q => {
+            const userAns = answers[q.id];
+            qualities[q.id] = (userAns !== undefined && userAns === q.correct_index)
+                ? 'good'
+                : 'again';
+        });
+
+        const total     = questions.length;
+        const pct       = Math.round((correct / total) * 100);
+        const timeStr   = document.getElementById('timer').textContent;
+
+        questionCard.innerHTML = `
+            <div class="score-screen">
+                <h1>Quiz Complete!</h1>
+                <div class="score-number">${pct}%</div>
+                <p style="color:var(--gray-500); margin-bottom:1rem;">
+                    Time: <strong>${timeStr}</strong>
+                </p>
+                <div class="score-breakdown">
+                    <div class="score-stat">
+                        <span class="stat-correct">${correct}</span>
+                        <span>Correct</span>
+                    </div>
+                    <div class="score-stat">
+                        <span class="stat-wrong">${wrong}</span>
+                        <span>Wrong</span>
+                    </div>
+                    <div class="score-stat">
+                        <span class="stat-skipped">${skipped}</span>
+                        <span>Skipped</span>
+                    </div>
+                </div>
+                <p style="color:var(--gray-500); font-size:0.95rem;">
+                    Review your answers and rate each question before saving.
+                </p>
+            </div>`;
+
+        // Swap nav buttons: just a "Review Answers" button
+        prevBtn.classList.add('hidden');
+        nextBtn.classList.add('hidden');
+        submitBtn.classList.add('hidden');
+
+        const reviewBtn = document.createElement('button');
+        reviewBtn.className   = 'primary-btn';
+        reviewBtn.textContent = 'Review Answers';
+        reviewBtn.style.width = '100%';
+        reviewBtn.addEventListener('click', enterReview);
+        document.querySelector('.nav-buttons').appendChild(reviewBtn);
+
+        // Remove navigator during score screen
+        document.querySelector('.question-navigator')?.remove();
+    }
+
+    // ─────────────────────────────────────────
+    //  PHASE 3 — Review: per-question with
+    //  correct/incorrect feedback + rating buttons
+    // ─────────────────────────────────────────
+    function enterReview() {
+        phase        = 'review';
+        currentIndex = 0;
+
+        // Rebuild nav buttons for review mode
+        const navDiv = document.querySelector('.nav-buttons');
+        navDiv.innerHTML = '';
+
+        const prevR = document.createElement('button');
+        prevR.className   = 'secondary-btn';
+        prevR.id          = 'review-prev';
+        prevR.textContent = 'Previous';
+
+        const nextR = document.createElement('button');
+        nextR.className   = 'secondary-btn';
+        nextR.id          = 'review-next';
+        nextR.textContent = 'Next';
+
+        const finishBtn = document.createElement('button');
+        finishBtn.className   = 'primary-btn';
+        finishBtn.id          = 'review-finish';
+        finishBtn.textContent = 'Finish & Save';
+
+        navDiv.appendChild(prevR);
+        navDiv.appendChild(nextR);
+        navDiv.appendChild(finishBtn);
+
+        prevR.addEventListener('click', () => {
+            if (currentIndex > 0) { currentIndex--; renderReviewQuestion(); }
+        });
+
+        nextR.addEventListener('click', () => {
+            if (currentIndex < questions.length - 1) { currentIndex++; renderReviewQuestion(); }
+        });
+
+        finishBtn.addEventListener('click', finishReview);
+
+        renderReviewQuestion();
+    }
+
+    function renderReviewQuestion() {
+        const q       = questions[currentIndex];
+        const isTF    = q.type === 'tf';
+        const userAns = answers[q.id];
+        const skipped = userAns === undefined;
+        const correct = !skipped && userAns === q.correct_index;
+
+        let html = `<p class="question-text">${escapeHtml(q.statement)}</p>`;
+        html += '<div class="options">';
+
+        const displayOptions = isTF ? ['True', 'False'] : q.options;
+
+        displayOptions.forEach((opt, i) => {
+            const isSelected = userAns === i;
+            const isCorrect  = i === q.correct_index;
+
+            let cls = 'option-label locked' + (isTF ? ' tf-option' : '');
+
+            if (skipped && isCorrect)     cls += ' skipped-correct';
+            else if (isCorrect)           cls += ' correct';
+            else if (isSelected)          cls += ' incorrect';
+
+            const label = isTF ? opt : `${String.fromCharCode(65 + i)}. ${opt}`;
+
+            html += `
+                <label class="${cls}">
+                    <input type="radio" name="q${q.id}" value="${i}"
+                        ${isSelected ? 'checked' : ''} disabled>
+                    <span>${escapeHtml(label)}</span>
+                </label>`;
+        });
+
+        html += '</div>';
+
+        // Explanation always shown in review
+        html += `
+            <div class="explanation">
+                <strong>Explanation:</strong>
+                ${escapeHtml(q.explanation || 'No explanation available')}
+            </div>`;
+
+        // Rating buttons
+        const currentRating = qualities[q.id] ?? (correct ? 'good' : 'again');
+        html += `
+            <div class="rating-row" id="rating-row-${q.id}">
+                ${['again','hard','good','easy'].map(r => `
+                    <button class="rating-btn ${r} ${currentRating === r ? 'selected' : ''}"
+                        data-qid="${q.id}" data-rating="${r}">
+                        ${r.charAt(0).toUpperCase() + r.slice(1)}
+                    </button>`).join('')}
+            </div>
+            <p class="rating-label">How well did you know this?</p>`;
+
+        questionCard.innerHTML = html;
+        currentEl.textContent  = currentIndex + 1;
+
+        // Rating button listeners
+        questionCard.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const qid    = parseInt(btn.dataset.qid);
+                const rating = btn.dataset.rating;
+                qualities[qid] = rating;
+
+                // Update selected state within this row
+                questionCard.querySelectorAll('.rating-btn').forEach(b => {
+                    b.classList.toggle('selected', b.dataset.rating === rating);
+                });
+            });
+        });
+
+        // Update nav button states
+        document.getElementById('review-prev').disabled = currentIndex === 0;
+        document.getElementById('review-next').disabled = currentIndex === questions.length - 1;
+
+        renderNavigator();
+    }
+
+    // ─────────────────────────────────────────
+    //  Finish: submit SRS + cleanup
+    // ─────────────────────────────────────────
+    async function finishReview() {
+        const finishBtn = document.getElementById('review-finish');
+        finishBtn.disabled     = true;
+        finishBtn.textContent  = 'Saving...';
+
+        const result = await submitSRSUpdate(userId, qualities);
+
+        if (!result.ok) {
+            console.warn('SRS update failed:', result.error);
+            finishBtn.disabled    = false;
+            finishBtn.textContent = 'Finish & Save';
+            return;
+        }
+
+        clearProgress();
+        localStorage.removeItem('current_quiz_id');
+
+        // Redirect or show completion message
+        questionCard.innerHTML = `
+            <div class="score-screen">
+                <h1>All done!</h1>
+                <p style="font-size:1.1rem; color:var(--gray-600);">
+                    Your progress has been saved.
+                </p>
+                <a href="dashboard.html" class="primary-btn" style="display:inline-block; margin-top:1.5rem; text-decoration:none;">
+                    Back to Dashboard
+                </a>
+            </div>`;
+
+        document.querySelector('.nav-buttons').innerHTML = '';
+        document.querySelector('.question-navigator')?.remove();
+        document.getElementById('quiz-header')?.remove();
+    }
+
+    // ─────────────────────────────────────────
+    //  Timer
+    // ─────────────────────────────────────────
     function startTimer() {
         timerInterval = setInterval(() => {
             time++;
@@ -431,7 +784,9 @@ function startQuiz(userId, questions) {
         }, 1000);
     }
 
-    // ── Navigation ───────────────────────────
+    // ─────────────────────────────────────────
+    //  Taking navigation
+    // ─────────────────────────────────────────
     prevBtn.addEventListener('click', () => {
         if (currentIndex > 0) {
             currentIndex--;
@@ -448,75 +803,11 @@ function startQuiz(userId, questions) {
         }
     });
 
-    submitBtn.addEventListener('click', () => {
-        quizSubmitted = true;
-        showResults();
-    });
+    submitBtn.addEventListener('click', () => showScoreScreen());
 
-    // ── Results ──────────────────────────────
-    async function showResults() {
-        clearInterval(timerInterval);
-
-        let score = 0;
-        const wrong = [];
-
-        questions.forEach((q, idx) => {
-            const userAns = answers[q.id];
-            if (userAns === q.correct_index) {
-                score++;
-            } else if (userAns !== undefined) {
-                wrong.push({ q, idx, userAns });
-            }
-        });
-
-        let html = `
-            <div class="results-screen">
-                <h1>Quiz Complete!</h1>
-                <p style="font-size:2.2rem;">
-                    Score: <strong>${score} / ${questions.length}</strong>
-                </p>
-                <p>Time: <strong>${document.getElementById('timer').textContent}</strong></p>`;
-
-        if (wrong.length > 0) {
-            html += `<h2>Review Wrong Answers</h2>`;
-            wrong.forEach(({ q, idx, userAns }) => {
-                const isTF   = q.type === 'tf';
-                const userStr = isTF ? (userAns === 0 ? 'True' : 'False') : String.fromCharCode(65 + userAns);
-                const corrStr = isTF ? (q.correct_index === 0 ? 'True' : 'False') : String.fromCharCode(65 + q.correct_index);
-
-                html += `
-                    <div style="margin:1.5rem 0; padding:1.2rem; background:#fff5f5; border-left:4px solid #ef4444; border-radius:8px;">
-                        <strong>Question ${idx + 1}:</strong><br>
-                        ${escapeHtml(q.statement)}<br><br>
-                        <strong>Your answer:</strong> <span style="color:#ef4444;">${userStr}</span><br>
-                        <strong>Correct:</strong> <span style="color:#10b981;">${corrStr}</span><br><br>
-                        <strong>Explanation:</strong> ${escapeHtml(q.explanation || '—')}
-                    </div>`;
-            });
-        } else {
-            html += '<p style="color:#10b981; font-weight:600;">Perfect score! Great job.</p>';
-        }
-
-        html += '</div>';
-        questionCard.innerHTML = html;
-        prevBtn.style.display = nextBtn.style.display = submitBtn.style.display = 'none';
-
-        // SRS update — placeholder for submit_quiz module (to be built)
-        const { error } = await client.rpc('submit_quiz_results', {
-            p_quiz_id:   quizId,
-            p_answers:   answers,
-            p_time_taken: time,
-        });
-
-        if (error) console.warn('SRS update failed:', error.message);
-
-        // Clear local progress
-        localStorage.removeItem(KEY + 'currentIndex');
-        localStorage.removeItem(KEY + 'answers');
-        localStorage.removeItem(KEY + 'time');
-    }
-
-    // ── Start ────────────────────────────────
+    // ─────────────────────────────────────────
+    //  Start
+    // ─────────────────────────────────────────
     renderQuestion();
     startTimer();
 }
@@ -526,7 +817,7 @@ function startQuiz(userId, questions) {
 // ─────────────────────────────────────────────
 function escapeHtml(str) {
     const div = document.createElement('div');
-    div.textContent = str;
+    div.textContent = String(str ?? '');
     return div.innerHTML;
 }
 
@@ -534,7 +825,7 @@ function showError(msg) {
     document.getElementById('loading-screen').style.display = 'none';
     const el = document.getElementById('error-screen');
     el.style.display = 'block';
-    el.textContent = msg;
+    el.textContent   = msg;
 }
 
 </script>
