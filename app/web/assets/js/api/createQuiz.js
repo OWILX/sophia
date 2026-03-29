@@ -68,7 +68,7 @@ async function getDailyNewBudget(userId) {
   return { ok: true, remaining, used };
 }
 
-export async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
+async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
   const today = new Date().toISOString().split('T')[0];
   const collected = new Set();
   
@@ -81,7 +81,7 @@ export async function selectQuestionsForModule(userId, moduleId, limit, allowedT
     .eq('user_question_progress.user_id', userId)
     .limit(2);
 
-  if (progressError) return { ok: false, error: progressError.message };
+  if (progressError) return { ok: false, error: progressError.message, step: "prefetch step" };
   
   // Map out the IDs the user has already encountered
   const seenIds = progressData.map(q => q.id);
@@ -98,7 +98,7 @@ export async function selectQuestionsForModule(userId, moduleId, limit, allowedT
       .order('random_key')
       .limit(limit);
 
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: error.message, step: "step 1" };
     data.forEach(q => collected.add(q.id));
   }
 
@@ -122,7 +122,7 @@ export async function selectQuestionsForModule(userId, moduleId, limit, allowedT
     }
 
     const { data, error } = await query;
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: error.message, step: "step 2" };
 
     data.forEach(q => {
       if (!collected.has(q.id)) {
@@ -153,7 +153,7 @@ export async function selectQuestionsForModule(userId, moduleId, limit, allowedT
     }
 
     const { data, error } = await query;
-    if (error) return { ok: false, error: error.message };
+    if (error) return { ok: false, error: error.message, step: "step 3"};
     
     data.forEach(q => collected.add(q.id));
   }
