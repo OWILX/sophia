@@ -61,7 +61,11 @@ async function getDailyNewBudget(userId) {
     console.error("Error syncing daily budget:", error.message);
     return { ok: false, error: error.message };
   }
-  }
+  const used = data?.new_count ?? 0;
+  const remaining = Math.max(0, DAILY_NEW_LIMIT - used);
+
+  return { ok: true, remaining, used };
+}
 async function incrementDailyBudget(userId, amount) {
   if (amount <= 0) return { ok: true };
 
@@ -76,11 +80,7 @@ async function incrementDailyBudget(userId, amount) {
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
-  const used = data?.new_count ?? 0;
-  const remaining = Math.max(0, DAILY_NEW_LIMIT - used);
-
-  return { ok: true, remaining, used };
-}
+  
 
 async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, newBudget) {
   const today = new Date().toISOString().split('T')[0];
