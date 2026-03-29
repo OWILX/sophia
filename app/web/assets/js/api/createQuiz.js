@@ -131,7 +131,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
     // Only apply the 'not in' filter if they have actually seen questions.
     // This prevents the empty array '()' syntax error.
     if (seenIds.length > 0) {
-    query = query.not('id', 'in', seenIds);  // ← pass array directly
+      query = query.not('id', 'in', `(${seenIds.join(',')})`);
     }
 
     const { data, error } = await query;
@@ -162,7 +162,7 @@ async function selectQuestionsForModule(userId, moduleId, limit, allowedTypes, n
 
     // Safely exclude collected items
     if (exclude.length > 0) {
-      query = query.not('id', 'in', exclude);
+      query = query.not('id', 'in', `(${exclude.join(',')})`);
     }
 
     const { data, error } = await query;
