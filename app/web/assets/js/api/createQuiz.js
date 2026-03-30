@@ -28,7 +28,7 @@ function validateQuizParams(userId, type, modules, num) {
   };
 }
 
-const DAILY_NEW_LIMIT = 25;
+const DAILY_NEW_LIMIT = 100;
 
 async function getDailyNewBudget(userId) {
   const today = new Date().toISOString().split('T')[0];
