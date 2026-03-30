@@ -1,5 +1,5 @@
 @import "reset.css";
-/*@import "main.css";*/
+@import "main.css";
 @import "components.css";
 
 /* assets/css/components.css additions (append or create if separate files) */
