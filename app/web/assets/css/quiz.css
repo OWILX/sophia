@@ -77,14 +77,14 @@
     font-weight: 600;
     color: var(--gray-700);
 }
-
 .quiz-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-3);
-}
-
+    font-size: 1.1rem;
+    color: var(--gray-700);
+ }
 .quiz-timer {
     display: flex;
     align-items: center;
@@ -100,7 +100,7 @@
 
 .question-card {
     background-color: var(--white);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: var(--spacing-4);
     box-shadow: var(--shadow-soft);
     margin-bottom: var(--spacing-4);
@@ -110,28 +110,59 @@
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: var(--spacing-3);
+    color: var(--gray-800);
 }
+.options {
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-2);
+ }
 
-.answer-options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
-}
+ .option-label {
+     display: flex;
+     align-items: center;
+     gap: var(--spacing-2);
+     padding: var(--spacing-2) var(--spacing-3);
+     background-color: var(--gray-50);
+     border: 2px solid var(--gray-200);
+     border-radius: 12px;
+     cursor: pointer;
+     transition: all 0.25s ease;
+     font-size: 1.05rem;
+ }
+ .option-label:hover {
+     border-color: var(--primary);
+     background: rgba(45, 212, 191, 0.05);
+ }
 
-.answer-label {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-3);
-    background-color: var(--gray-50);
-    border-radius: 8px;
-    cursor: pointer;
-}
+ .option-label input {
+     margin-right: 1rem;
+     width: 20px;
+     height: 20px;
+ }
 
-.answer-label input {
-    width: 20px;
-    height: 20px;
-}
+ /* During review: lock pointer events so user can't change answers */
+ .option-label.locked {
+     pointer-events: none;
+ }
+
+ .option-label.correct {
+     background: rgba(0, 200, 100, 0.15);
+     border-color: #00c864;
+ }
+
+ .option-label.incorrect {
+     background: rgba(255, 80, 80, 0.15);
+     border-color: #ff5050;
+ }
+
+ /* Skipped question in review */
+ .option-label.skipped-correct {
+     background: rgba(0, 200, 100, 0.08);
+     border-color: #00c864;
+     border-style: dashed;
+ }
+
 
 .cloze-input {
     width: 100%;
@@ -155,12 +186,12 @@
 /* assets/css/screens.css additions */
 
 .quiz-body {
+    background: var(--gray-50);
     font-family: 'Inter', sans-serif;
-    background-color: var(--gray-50);
     min-height: 100vh;
-    padding-bottom: 80px;
-}
-
+    padding: 1rem;
+    padding-bottom: 100px;
+  }
 .quiz-main {
     padding: var(--spacing-3);
     animation: fade-up 0.5s var(--easing-default);
@@ -350,23 +381,6 @@
 
 #start-quiz-btn:active {
     transform: translateY(0) scale(0.98);
-}
-
-/* Question card during quiz – cleaner & more focused */
-.question-card {
-    background: linear-gradient(145deg, #ffffff, #f9fffe);
-    border: none;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.06);
-    border-radius: 20px;
-    padding: var(--spacing-5);
-}
-
-.question-text {
-    font-size: 1.375rem;
-    line-height: 1.45;
-    font-weight: 600;
-    color: var(--gray-800);
-    margin-bottom: var(--spacing-5);
 }
 
 /* Answer cards – selectable style */
