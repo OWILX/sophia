@@ -9,113 +9,104 @@
     <title>Sophia-OWILX Dashboard</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/css/dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dashboard-body">
+
     <header class="app-header">
         <div class="header-left">
             <img src="assets/images/logo2.png" alt="Sophia-OWILX Logo" class="app-logo" width="40" height="40">
         </div>
         <h1 class="header-title">Dashboard</h1>
-<div class="header-right">
-    <button class="icon-btn" id="notifications-btn" aria-label="Notifications" onclick="window.location.href='notification.html';">
-        <i class="fas fa-bell"></i>
-        <span class="badge-dot"></span>
-    </button>
-    <button class="icon-btn" aria-label="Settings" onclick="window.location.href='settings.html';">
-        <i class="fas fa-cog"></i>
-    </button>
-</div>
+        <div class="header-right">
+            <button class="icon-btn" id="notifications-btn" aria-label="Notifications"
+                onclick="window.location.href='notification.html';">
+                <i class="fas fa-bell"></i>
+                <span class="badge-dot"></span>
+            </button>
+            <button class="icon-btn" aria-label="Settings"
+                onclick="window.location.href='settings.html';">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
     </header>
-  <div class="content-wrapper">
-    <main class="dashboard-main">
-        <section class="stats-section" aria-labelledby="quick-stats-title">
-    <div class="section-header">
-        <h2 id="quick-stats-title">Quick Stats</h2>
-        <a href="progress.html" class="more-link">See All <i class="fas fa-chevron-right"></i></a>
+
+    <div class="content-wrapper">
+        <main class="dashboard-main">
+
+            <!-- Quick Stats -->
+            <section class="stats-section" aria-labelledby="quick-stats-title">
+                <div class="section-header">
+                    <h2 id="quick-stats-title">Quick Stats</h2>
+                    <a href="progress.html" class="more-link">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="stats-grid">
+                    <!-- Skeletons replaced by JS -->
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+
+                    <div class="stat-card real-content hidden" id="stat-quizzes">
+                        <span class="stat-title">Quizzes</span>
+                        <span class="stat-value">—</span>
+                    </div>
+                    <div class="stat-card real-content hidden" id="stat-streak">
+                        <span class="stat-title">Streak</span>
+                        <span class="stat-value">—</span>
+                    </div>
+                    <div class="stat-card real-content hidden" id="stat-best">
+                        <span class="stat-title">Best</span>
+                        <span class="stat-value">—</span>
+                    </div>
+                </div>
+            </section>
+
+            <button class="primary-btn" onclick="window.location.href='quiz.html';">
+                Start New Quiz
+            </button>
+
+            <!-- Courses -->
+            <section class="courses" aria-labelledby="courses-title">
+                <div class="section-header">
+                    <h2 id="courses-title">Courses</h2>
+                    <a href="quiz.html" class="more-link">More <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="courses-container">
+                    <!-- Skeletons — removed by JS on load -->
+                    <div class="course-card skeleton" aria-hidden="true"></div>
+                    <div class="course-card skeleton" aria-hidden="true"></div>
+                    <div class="course-card skeleton" aria-hidden="true"></div>
+                    <div class="course-card skeleton" aria-hidden="true"></div>
+                    <!-- Real course cards injected here by dashboard.js -->
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="recent-activity" aria-labelledby="recent-activity-title">
+                <div class="section-header">
+                    <h2 id="recent-activity-title">Recent Activity</h2>
+                    <a href="progress.html" class="more-link">More <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <ul class="activity-list">
+                    <!-- Skeletons — removed by JS on load -->
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <!-- Real items injected here by dashboard.js -->
+                </ul>
+            </section>
+
+        </main>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card skeleton" aria-hidden="true"></div>
-        <div class="stat-card skeleton" aria-hidden="true"></div>
-        <div class="stat-card skeleton" aria-hidden="true"></div>
-
-        <div class="stat-card real-content hidden" id="stat-quizzes">
-            <span class="stat-title">Quizzes</span>
-            <span class="stat-value">0</span>
-        </div>
-        <div class="stat-card real-content hidden" id="stat-streak">
-            <span class="stat-title">Streak</span>
-            <span class="stat-value">0 days</span>
-        </div>
-        <div class="stat-card real-content hidden" id="stat-best">
-            <span class="stat-title">Best</span>
-            <span class="stat-value">Math</span>
-        </div>
-    </div>
-</section>
-
-
-        <button class="primary-btn" onclick="window.location.href='quiz.html';">Start New Quiz</button>
-
-        <section class="courses" aria-labelledby="courses-title">
-            <div class="section-header">
-                <h2 id="courses-title">Courses</h2>
-                <a href="quiz.html" class="more-link">More <i class="fas fa-chevron-right"></i></a>
-            </div>
-            <div class="courses-container">
-                <!-- Skeleton states -->
-                <div class="course-card skeleton" aria-hidden="true"></div>
-                <div class="course-card skeleton" aria-hidden="true"></div>
-                <div class="course-card skeleton" aria-hidden="true"></div>
-                <div class="course-card skeleton" aria-hidden="true"></div>
-                <!-- Real content (hidden initially) -->
-                <div class="course-card real-content hidden">
-                    <h3 class="course-title">Maths</h3>
-                    <p class="course-progress">Progress: 45%</p>
-                </div>
-                <div class="course-card real-content hidden">
-                    <h3 class="course-title">Science</h3>
-                    <p class="course-progress">Progress: 60%</p>
-                </div>
-                <div class="course-card real-content hidden">
-                    <h3 class="course-title">History</h3>
-                    <p class="course-progress">Progress: 30%</p>
-                </div>
-                <div class="course-card real-content hidden">
-                    <h3 class="course-title">Literature</h3>
-                    <p class="course-progress">Progress: 75%</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="recent-activity" aria-labelledby="recent-activity-title">
-            <div class="section-header">
-                <h2 id="recent-activity-title">Recent Activity</h2>
-                <a href="progress.html" class="more-link">More <i class="fas fa-chevron-right"></i></a>
-            </div>
-            <ul class="activity-list">
-                <!-- Skeleton states -->
-                <li class="activity-item skeleton" aria-hidden="true"></li>
-                <li class="activity-item skeleton" aria-hidden="true"></li>
-                <li class="activity-item skeleton" aria-hidden="true"></li>
-                <!-- Real content (hidden initially) -->
-                <li class="activity-item real-content hidden">Completed Math Quiz - Score: 85% (Yesterday)</li>
-                <li class="activity-item real-content hidden">Started Science Module (2 days ago)</li>
-                <li class="activity-item real-content hidden">Achieved 5-day streak (3 days ago)</li>
-            </ul>
-        </section>
-    </main>
-  </div>
     <footer class="bottom-nav">
-    <div class="sidebar-header">
-        <button class="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar-nav">
-            <i class="fas fa-chevron-left" style="transform: scale(1.6);"></i>
-        </button>
-    </div>
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" aria-label="Toggle sidebar"
+                aria-expanded="true" aria-controls="sidebar-nav">
+                <i class="fas fa-chevron-left" style="transform: scale(1.6);"></i>
+            </button>
+        </div>
         <nav class="nav-bar" aria-label="Main navigation">
             <a href="dashboard.html" class="nav-item active" aria-current="page">
                 <i class="fas fa-home" style="transform: scale(1.6);"></i>
@@ -140,7 +131,7 @@
         </nav>
     </footer>
 
-    
-    <script defer src="assets/js/dashboard.js"></script>
+    <script type="module" src="assets/js/dashboard.js"></script>
+
 </body>
 </html>

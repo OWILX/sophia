@@ -628,3 +628,51 @@
         transition: all 0.4s var(--easing-default);
     }
 }
+.progress-bar-track {
+            height: 6px;
+            background: var(--gray-200, #e5e7eb);
+            border-radius: 999px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary, #2dd4bf), #20b2aa);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        .course-sub {
+            font-size: 0.8rem;
+            color: var(--gray-500, #6b7280);
+            margin-top: 0.25rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .activity-icon {
+            color: var(--primary, #2dd4bf);
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray-400, #9ca3af);
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            color: var(--gray-400, #9ca3af);
+            font-size: 0.95rem;
+            padding: 0.5rem 0;
+        }
