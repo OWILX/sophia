@@ -401,6 +401,7 @@
     color: #ef4444;
     font-weight: 600;
     margin: 2rem 0;
+    display: none;
 }
 
 /* Bottom Navigation */
