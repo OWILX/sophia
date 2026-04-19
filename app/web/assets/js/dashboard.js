@@ -5,27 +5,29 @@ const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
 // ────────────────────────────────────────────────────────────────
 //  AUTH GUARD – redirect immediately if no session exists
 // ────────────────────────────────────────────────────────────────
-async function enforceAuth() {
+async function enforceAuthAndInit() {
   const { data: { session }, error } = await client.auth.getSession();
+
   if (error || !session) {
     window.location.replace(LOGIN_URL);
-    return false;
+    return;
   }
-  return true;
+
+  // DOM is already ready (script is at the bottom of <body>)
+  initDashboardUI();
 }
 
-// Auth state listener – keep the door locked
+// Auth state listener (keep this)
 client.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT' || !session) {
     window.location.replace(LOGIN_URL);
   }
 });
 
-// Kick off auth check
-enforceAuth().then(isAuthed => {
-  if (!isAuthed) return;
-  // Continue with dashboard setup only after auth is confirmed
-  document.addEventListener('DOMContentLoaded', initDashboardUI);
+// Start everything
+enforceAuthAndInit().catch(err => {
+  console.error('Auth/init failed:', err);
+  window.location.replace(LOGIN_URL);
 });
 
 // ────────────────────────────────────────────────────────────────
@@ -45,7 +47,12 @@ async function initDashboardUI() {
   }
 
   // Load dashboard data
-  await loadDashboardData();
+  try{
+      await loadDashboardData();
+  } catch (err) {
+  console.error(err);
+  showError('Failed to load dashboard. Please refresh the page.');
+}
 
   // Setup mobile interactions
   setupMobileInteractions(isIOS, isAndroid);
