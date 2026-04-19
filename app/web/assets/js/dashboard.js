@@ -1,10 +1,6 @@
 // assets/js/dashboard.js
-const { createClient } = supabase;
-const SUPABASE_URL = "https://nlenaoincibjuyejhmak.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_UVe9_-V8CSy0Jujg4JjcnQ_MXP6F2Ap";
+import { client } from './supabase.js';
 const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
-
-const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ────────────────────────────────────────────────────────────────
 //  AUTH GUARD – redirect immediately if no session exists
