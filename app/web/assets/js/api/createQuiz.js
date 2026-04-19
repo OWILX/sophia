@@ -30,42 +30,39 @@ function validateQuizParams(userId, type, modules, num) {
 
 const DAILY_NEW_LIMIT = 100;
 
+
 async function getDailyNewBudget(userId) {
   const today = new Date().toISOString().split('T')[0];
 
-  // 1. Try to fetch existing record for today
-  let { data, error } = await client
+  // 1. Upsert: insert only if no record exists for today, otherwise do nothing
+  const { error: upsertError } = await client
+    .from('user_daily_new_questions')
+    .upsert(
+      { user_id: userId, for_date: today, new_count: 0 },
+      { onConflict: 'user_id,for_date', ignoreDuplicates: true }
+    );
+
+  if (upsertError){
+	console.error("Error syncing daily budget:", upsertError.message);
+	return { ok: false, error: upsertError.message };
+  }
+
+  // 2. Fetch the current record (whether just created or pre-existing)
+  const { data, error } = await client
     .from('user_daily_new_questions')
     .select('new_count')
     .eq('user_id', userId)
     .eq('for_date', today)
-    .maybeSingle(); // Returns null without error if not found
-
-  // 2. If it doesn't exist, create the "starting" record
-  if (!data && !error) {
-    const { data: newData, error: insertError } = await client
-      .from('user_daily_new_questions')
-      .insert({ 
-        user_id: userId, 
-        for_date: today, 
-        new_count: 0 // Start at 0 used
-      })
-      .select('new_count')
-      .single();
-    
-    data = newData;
-    error = insertError;
-  }
-
+    .single();
   if (error) {
     console.error("Error syncing daily budget:", error.message);
     return { ok: false, error: error.message };
   }
   const used = data?.new_count ?? 0;
   const remaining = Math.max(0, DAILY_NEW_LIMIT - used);
-
   return { ok: true, remaining, used };
 }
+
 async function incrementDailyBudget(userId, amount) {
   if (amount <= 0) return { ok: true };
 
