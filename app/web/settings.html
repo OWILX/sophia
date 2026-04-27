@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2DD4BF">
+    <title>LetStudy Settings</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="assets/css/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="settings-body">
+    <header class="app-header">
+        <div class="header-left">
+            <button class="icon-btn back-btn" aria-label="Go back" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <h1 class="header-title">Settings</h1>
+        <div class="header-right">
+            <!-- Empty or future actions -->
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <main class="settings-main">
+            <section class="settings-section">
+                <h2 class="section-title">Account</h2>
+                <div class="settings-item">
+    <div class="settings-label">
+        <i class="fas fa-id-badge settings-icon"></i>
+        <span>Full Name</span>
+    </div>
+    <span class="settings-value" id="user-display-name">User Name</span>
+</div>
+
+<div class="settings-item">
+    <div class="settings-label">
+        <i class="fas fa-user-circle settings-icon"></i>
+        <span>Google Account</span>
+    </div>
+    <span class="settings-value">you@youruniversity.edu</span>
+</div>
+
+<div class="settings-item">
+    <div class="settings-label">
+        <i class="fas fa-sign-out-alt settings-icon"></i>
+        <span>Sign Out</span>
+    </div>
+    <button class="danger-btn small" id="sign-out">Sign Out</button>
+</div>
+            </section>
+
+            <section class="settings-section">
+                <h2 class="section-title">App Preferences</h2>
+                <div class="settings-item toggle-item">
+                    <div class="settings-label">
+                        <i class="fas fa-moon settings-icon"></i>
+                        <span>Dark Mode</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item toggle-item">
+                    <div class="settings-label">
+                        <i class="fas fa-bell settings-icon"></i>
+                        <span>Push Notifications</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="notifications-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item toggle-item">
+                    <div class="settings-label">
+                        <i class="fas fa-volume-up settings-icon"></i>
+                        <span>Sound Effects</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="sounds-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2 class="section-title">Data & Privacy</h2>
+                <a href="#" class="settings-item link-item">
+                    <div class="settings-label">
+                        <i class="fas fa-shield-alt settings-icon"></i>
+                        <span>Privacy Policy</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="#" class="settings-item link-item">
+                    <div class="settings-label">
+                        <i class="fas fa-file-alt settings-icon"></i>
+                        <span>Terms of Service</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <div class="settings-item">
+                    <div class="settings-label">
+                        <i class="fas fa-trash-alt settings-icon danger-icon"></i>
+                        <span>Delete Account</span>
+                    </div>
+                    <button class="danger-btn small" id="delete-account">Delete</button>
+                </div>
+            </section>
+
+            <section class="settings-section version-info">
+                <p>LetStudy v1.0.0</p>
+                <p>© 2025 OWILXAI</p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bottom-nav">
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar-nav">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <nav class="nav-bar" id="sidebar-nav" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="quiz.html" class="nav-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Quizzes</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span>Games</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </footer>
+
+    
+    <script src="assets/js/settings.js"></script>
+</body>
+</html>
