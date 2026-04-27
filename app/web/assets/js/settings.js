@@ -128,7 +128,7 @@ async function initSettings(user) {
             localStorage.removeItem('letstudy_user');
             localStorage.removeItem('letstudy_settings');
             await client.auth.signOut();
-            window.location.href = 'slogin.html';
+            window.location.href = LOGIN_URL;
         }
     });
 

@@ -246,7 +246,10 @@ input:checked + .slider:before {
 .chip-group {
     display: flex;
     gap: var(--spacing-2);
+    overflow-x: auto;          /* Enable horizontal scrolling */
+    white-space: nowrap;       /* Prevents items from breaking to new lines */
 }
+
 
 .chip {
     background: var(--gray-100);
@@ -259,6 +262,7 @@ input:checked + .slider:before {
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
+    flex: 0 0 auto;
 }
 
 .chip:hover {
