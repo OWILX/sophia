@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2DD4BF">
+    <title>Sophia-OWILX Notifications</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="assets/css/leaderboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="leaderboard-body">
+    <header class="app-header">
+        <div class="header-left">
+            <img src="assets/images/logo2.png" alt="LetStudy Logo" class="app-logo" width="40" height="40">
+        </div>
+        <h1 class="header-title">Leaderboard</h1>
+        <div class="header-right">
+            <button class="icon-btn" aria-label="Notifications" onclick="window.location.href='notifications.html';">
+                <i class="fas fa-bell"></i>
+                <span class="badge-dot"></span>
+            </button>
+            <button class="icon-btn" aria-label="Settings" onclick="window.location.href='settings.html';">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <main class="leaderboard-main">
+            <!-- Leaderboard Section -->
+            <section class="leaderboard-section" aria-labelledby="leaderboard-title">
+                <div class="section-header">
+                    <h2 id="leaderboard-title">Top 20 Users</h2>
+                    <select id="criteria-select" aria-label="Select Criteria">
+                        <option value="points">Points</option>
+                        <option value="course-points">Per Course Points</option>
+                    </select>
+                    <select id="period-select" aria-label="Select Period">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="bimonthly">Bi-Monthly</option>
+                        <option value="alltime">All Time</option>
+                    </select>
+                </div>
+                <div id="course-select-wrapper" class="hidden">
+                    <select id="course-select" aria-label="Select Course">
+                        <option value="math">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="literature">Literature</option>
+                    </select>
+                </div>
+                <ul class="leaderboard-list">
+                    <!-- Skeleton states -->
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <li class="leaderboard-item skeleton" aria-hidden="true"></li>
+                    <!-- Real content populated by JS -->
+                </ul>
+            </section>
+
+            <!-- Competitions Section -->
+            <section class="competitions-section" aria-labelledby="competitions-title">
+                <div class="section-header">
+                    <h2 id="competitions-title">Most Engaged Competitions</h2>
+                    <a href="#" class="more-link">View All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <ul class="competitions-list">
+                    <!-- Skeleton states -->
+                    <li class="competition-item skeleton" aria-hidden="true"></li>
+                    <li class="competition-item skeleton" aria-hidden="true"></li>
+                    <li class="competition-item skeleton" aria-hidden="true"></li>
+                    <!-- Real content (hidden initially) -->
+                    <li class="competition-item real-content hidden">
+                        <i class="fas fa-trophy competition-icon"></i>
+                        <div class="competition-content">
+                            <h3 class="competition-title">Math Mastery Challenge</h3>
+                            <p class="competition-desc">500 participants • Ends in 3 days</p>
+                        </div>
+                        <a href="#" class="competition-link" aria-label="View details">Details <i class="fas fa-arrow-right"></i></a>
+                    </li>
+                    <li class="competition-item real-content hidden">
+                        <i class="fas fa-trophy competition-icon"></i>
+                        <div class="competition-content">
+                            <h3 class="competition-title">Science Sprint</h3>
+                            <p class="competition-desc">320 participants • Ongoing</p>
+                        </div>
+                        <a href="#" class="competition-link" aria-label="View details">Details <i class="fas fa-arrow-right"></i></a>
+                    </li>
+                    <li class="competition-item real-content hidden">
+                        <i class="fas fa-trophy competition-icon"></i>
+                        <div class="competition-content">
+                            <h3 class="competition-title">History Heroes</h3>
+                            <p class="competition-desc">450 participants • Starts tomorrow</p>
+                        </div>
+                        <a href="#" class="competition-link" aria-label="View details">Details <i class="fas fa-arrow-right"></i></a>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bottom-nav">
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" aria-label="Toggle sidebar"
+                aria-expanded="true" aria-controls="sidebar-nav">
+                <i class="fas fa-chevron-left" style="transform: scale(1.6);"></i>
+            </button>
+        </div>
+        <nav class="nav-bar" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home" style="transform: scale(1.6);"></i>
+                <span>Home</span>
+            </a>
+            <a href="quiz.html" class="nav-item">
+                <i class="fas fa-question-circle" style="transform: scale(1.6);"></i>
+                <span>Quizzes</span>
+            </a>
+            <a href="games.html" class="nav-item">
+                <i class="fas fa-gamepad" style="transform: scale(1.6);"></i>
+                <span>Games</span>
+            </a>
+            <a href="leaderboard.html" class="nav-item active" aria-current="page">
+                <i class="fas fa-trophy" style="transform: scale(1.6);"></i>
+                <span>Leaderboard</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-user" style="transform: scale(1.6);"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </footer>
+
+    <script src="assets/js/leaderboard.js"></script>
+</body>
+</html>
