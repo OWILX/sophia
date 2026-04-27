@@ -2,13 +2,11 @@
 
 /* Base Quiz Body */
 .quiz-body {
-    background: var(--gray-50);
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--gray-50);
+    font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    padding: 1rem;
-    padding-bottom: 100px;
-    color: var(--gray-800);
-    line-height: 1.5;
+    padding-bottom: 80px;
+    color: var(--gray-700);
 }
 
 /* Main Content */

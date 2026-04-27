@@ -1,3 +1,4 @@
+<!-- settings.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2DD4BF">
-    <title>LetStudy Settings</title>
+    <title>Sophia-OWILX Settings</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/css/settings.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
@@ -20,40 +21,29 @@
             </button>
         </div>
         <h1 class="header-title">Settings</h1>
-        <div class="header-right">
-            <!-- Empty or future actions -->
-        </div>
+        <div class="header-right"></div>
     </header>
 
     <div class="content-wrapper">
         <main class="settings-main">
-            <section class="settings-section">
-                <h2 class="section-title">Account</h2>
-                <div class="settings-item">
-    <div class="settings-label">
-        <i class="fas fa-id-badge settings-icon"></i>
-        <span>Full Name</span>
-    </div>
-    <span class="settings-value" id="user-display-name">User Name</span>
-</div>
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-avatar" id="profile-avatar">
+                    <span id="avatar-initials"></span>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name-wrap">
+                        <span class="profile-name" id="profile-name-display"></span>
+                        <input type="text" class="profile-name-input" id="profile-name-input" aria-label="Edit name" style="display:none;">
+                    </div>
+                    <span class="profile-email" id="profile-email"></span>
+                </div>
+                <button class="icon-btn signout-btn" id="profile-signout" title="Sign Out">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
 
-<div class="settings-item">
-    <div class="settings-label">
-        <i class="fas fa-user-circle settings-icon"></i>
-        <span>Google Account</span>
-    </div>
-    <span class="settings-value">you@youruniversity.edu</span>
-</div>
-
-<div class="settings-item">
-    <div class="settings-label">
-        <i class="fas fa-sign-out-alt settings-icon"></i>
-        <span>Sign Out</span>
-    </div>
-    <button class="danger-btn small" id="sign-out">Sign Out</button>
-</div>
-            </section>
-
+            <!-- App Preferences -->
             <section class="settings-section">
                 <h2 class="section-title">App Preferences</h2>
                 <div class="settings-item toggle-item">
@@ -72,7 +62,7 @@
                         <span>Push Notifications</span>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="notifications-toggle" checked>
+                        <input type="checkbox" id="notifications-toggle">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -82,12 +72,25 @@
                         <span>Sound Effects</span>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="sounds-toggle" checked>
+                        <input type="checkbox" id="sounds-toggle">
                         <span class="slider"></span>
                     </label>
                 </div>
+                <div class="settings-item">
+                    <div class="settings-label">
+                        <i class="fas fa-bullseye settings-icon"></i>
+                        <span>Daily Quiz Goal</span>
+                    </div>
+                    <div class="chip-group" id="daily-goal-chips">
+                        <button class="chip" data-value="5">5</button>
+                        <button class="chip" data-value="10">10</button>
+                        <button class="chip" data-value="15">15</button>
+                        <button class="chip" data-value="20">20</button>
+                    </div>
+                </div>
             </section>
 
+            <!-- Data & Privacy -->
             <section class="settings-section">
                 <h2 class="section-title">Data & Privacy</h2>
                 <a href="#" class="settings-item link-item">
@@ -104,6 +107,12 @@
                     </div>
                     <i class="fas fa-chevron-right"></i>
                 </a>
+            </section>
+
+            <!-- Danger Zone -->
+            <section class="settings-section danger-zone">
+                <h2 class="section-title section-title-danger">Danger Zone</h2>
+                <p class="danger-description">Once you delete your account, there is no going back. Please be certain.</p>
                 <div class="settings-item">
                     <div class="settings-label">
                         <i class="fas fa-trash-alt settings-icon danger-icon"></i>
@@ -115,7 +124,7 @@
 
             <section class="settings-section version-info">
                 <p>LetStudy v1.0.0</p>
-                <p>© 2025 OWILXAI</p>
+                <p>© 2026 OWILXAI</p>
             </section>
         </main>
     </div>
@@ -150,7 +159,20 @@
         </nav>
     </footer>
 
-    
+    <!-- Custom confirm modal -->
+    <div id="confirm-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <p id="confirm-message"></p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-danger" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
     <script src="assets/js/settings.js"></script>
 </body>
 </html>

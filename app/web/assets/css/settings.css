@@ -157,3 +157,298 @@ input:checked + .slider:before {
         margin-right: auto;
     }
 }
+
+/* Profile Card */
+.profile-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: var(--spacing-4);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    box-shadow: var(--shadow-soft);
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+}
+
+.profile-name-wrap {
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
+}
+
+.profile-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: border-color 0.2s;
+    padding: 2px 0;
+}
+
+.profile-name:hover {
+    border-bottom-color: var(--primary);
+}
+
+.profile-name-input {
+    font-family: inherit;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    outline: none;
+    background: transparent;
+    width: 100%;
+    padding: 2px 0;
+}
+
+.profile-email {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    word-break: break-all;
+}
+
+.signout-btn {
+    font-size: 1.25rem;
+    color: var(--gray-500);
+    transition: color 0.2s;
+}
+
+.signout-btn:hover {
+    color: var(--error);
+}
+
+/* Chip Group for daily goal */
+.chip-group {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.chip {
+    background: var(--gray-100);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.chip:hover {
+    background: var(--gray-200);
+}
+
+.chip.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(45, 212, 191, 0.3);
+}
+
+/* Danger Zone */
+.danger-zone {
+    border: 1px solid var(--error-light, #fecaca);
+    background-color: var(--error-bg, #fff5f5);
+}
+
+.section-title-danger {
+    color: var(--error) !important;
+    background-color: transparent;
+}
+
+.danger-description {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    padding: 0 var(--spacing-4) var(--spacing-2);
+    margin: 0;
+}
+
+/* Confirm modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fade-in 0.2s ease;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 16px;
+    padding: var(--spacing-5);
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: scale-up 0.2s ease;
+}
+
+.modal-content p {
+    margin: 0 0 var(--spacing-4);
+    font-size: 1rem;
+    color: var(--gray-700);
+    line-height: 1.5;
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: center;
+}
+
+.btn {
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.btn-secondary {
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+
+.btn-danger {
+    background: var(--error);
+    color: var(--white);
+}
+
+/* Toast */
+#toast-container {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--gray-800);
+    color: var(--white);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    pointer-events: auto;
+    animation: toast-in 0.3s ease, toast-out 0.3s ease 2.5s forwards;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.toast.error {
+    background: var(--error);
+}
+
+.toast.success {
+    background: #10B981;
+}
+
+/* Dark Mode Overrides */
+:root.dark {
+    --white: #1e1e2f;
+    --gray-50: #1a1a2e;
+    --gray-100: #232338;
+    --gray-200: #2e2e44;
+    --gray-400: #4a4a6a;
+    --gray-500: #9e9eb3;
+    --gray-600: #b0b0c0;
+    --gray-700: #c8c8d8;
+    --gray-800: #e0e0f0;
+    --primary: #2DD4BF;
+    --error: #ef4444;
+    --error-light: #7f1d1d;
+    --error-bg: #2d1b1b;
+    --shadow-soft: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-card: 0 4px 16px rgba(0,0,0,0.4);
+    color-scheme: dark;
+}
+
+:root.dark body {
+    background-color: #121220;
+    color: var(--gray-800);
+}
+
+:root.dark .settings-section {
+    background-color: var(--white);
+    border: 1px solid var(--gray-200);
+}
+
+:root.dark .section-title {
+    background-color: var(--gray-100);
+}
+
+:root.dark .settings-item {
+    border-top-color: var(--gray-200);
+}
+
+:root.dark .chip {
+    background: var(--gray-200);
+    color: var(--gray-800);
+}
+
+:root.dark .chip.active {
+    background: var(--primary);
+    color: #121220;
+}
+
+:root.dark .profile-name,
+:root.dark .profile-name-input {
+    color: var(--gray-800);
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scale-up {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes toast-in {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes toast-out {
+    to { transform: translateY(20px); opacity: 0; }
+}
