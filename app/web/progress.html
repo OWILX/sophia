@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2DD4BF">
+    <title>LetStudy Profile</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="assets/css/notification.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="profile-body">
+    <header class="app-header">
+        <div class="header-left">
+            <img src="assets/images/logo2.png" alt="LetStudy Logo" class="app-logo" width="40" height="40">
+        </div>
+        <h1 class="header-title">Profile</h1>
+        <div class="header-right">
+            <button class="icon-btn" aria-label="Notifications" onclick="window.location.href='notifications.html';">
+                <i class="fas fa-bell"></i>
+                <span class="badge-dot"></span>
+            </button>
+            <button class="icon-btn" aria-label="Settings" onclick="window.location.href='settings.html';">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <main class="profile-main">
+            <section class="profile-header" aria-labelledby="profile-greeting">
+                <h2 id="profile-greeting" class="greeting">Hello, <span id="user-name">User</span>!</h2>
+                <p class="motivation">Keep up the great work on your learning journey.</p>
+            </section>
+
+            <section class="quick-stats" aria-labelledby="stats-title">
+                <h2 id="stats-title" class="section-title">Your Stats</h2>
+                <div class="stat-cards">
+                    <!-- Skeleton -->
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+                    <div class="stat-card skeleton" aria-hidden="true"></div>
+                    <!-- Real -->
+                    <div class="stat-card real-content hidden" id="stat-quizzes">
+                        <h3>Quizzes Completed</h3>
+                        <p class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card real-content hidden" id="stat-streak">
+                        <h3>Current Streak</h3>
+                        <p class="stat-value">0 days</p>
+                    </div>
+                    <div class="stat-card real-content hidden" id="stat-best">
+                        <h3>Best Subject</h3>
+                        <p class="stat-value">None yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="progress-charts" aria-labelledby="progress-title">
+                <h2 id="progress-title" class="section-title">Your Progress</h2>
+                <div class="chart-container">
+                    <h3>Progress by Course (Bar Chart)</h3>
+                    <canvas id="bar-chart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Subject Performance Distribution (Pie Chart)</h3>
+                    <canvas id="pie-chart" width="400" height="200"></canvas>
+                </div>
+            </section>
+
+            <section class="recent-activity" aria-labelledby="activity-title">
+                <h2 id="activity-title" class="section-title">Recent Activity</h2>
+                <ul class="activity-list">
+                    <!-- Skeleton -->
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <li class="activity-item skeleton" aria-hidden="true"></li>
+                    <!-- Real -->
+                    <li class="activity-item real-content hidden">Completed Math Quiz - 85% (Yesterday)</li>
+                    <li class="activity-item real-content hidden">Started Science Module (2 days ago)</li>
+                    <li class="activity-item real-content hidden">Achieved 5-day streak (3 days ago)</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bottom-nav">
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar-nav">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <nav class="nav-bar" id="sidebar-nav" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="quiz.html" class="nav-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Quizzes</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-gamepad"></i>
+                <span>Games</span>
+            </a>
+            <a href="leaderboard.html" class="nav-item">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </a>
+            <a href="progress.html" class="nav-item active" aria-current="page">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </footer>
+
+    <script src="assets/js/profile.js"></script>
+</body>
+</html>
