@@ -1,5 +1,5 @@
 import { client } from './supabase.js';
-const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
+const LOGIN_URL = "https://medsophia-owilx.netlify.app/app/web/login.html";
 
 async function init() {
       const { data: { session }, error } = await client.auth.getSession();

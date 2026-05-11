@@ -5,8 +5,8 @@ import { getTopics } from './api/topics.js';
 import { getSubtopics } from './api/subtopics.js';
 import { getModules } from './api/modules.js';
 import { createQuiz } from './api/createQuiz.js';
-const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
-const QUIZ_URL = "https://owilx.github.io/sophia/app/web/start_quiz.html";
+const LOGIN_URL = "https://medsophia-owilx.netlify.app/app/web/login.html";
+const QUIZ_URL = "https://medsophia-owilx.netlify.app/app/web/start_quiz.html";
 
 async function init() {
       const { data: { session }, error } = await client.auth.getSession();

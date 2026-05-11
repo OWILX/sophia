@@ -1,6 +1,6 @@
 // assets/js/dashboard.js
 import { client } from './supabase.js';
-const LOGIN_URL = "https://owilx.github.io/sophia/app/web/login.html";
+const LOGIN_URL = "https://medsophia-owilx.netlify.app/app/web/login.html";
 
 // ────────────────────────────────────────────────────────────────
 //  AUTH GUARD – redirect immediately if no session exists
