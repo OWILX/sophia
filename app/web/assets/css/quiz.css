@@ -2,11 +2,11 @@
 
 /* Base Quiz Body */
 .quiz-body {
-    background-color: var(--gray-50);
-    font-family: 'Inter', sans-serif;
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     min-height: 100vh;
     padding-bottom: 80px;
-    color: var(--gray-700);
 }
 
 /* Main Content */
@@ -160,8 +160,9 @@
 .quiz-container {
     max-width: 700px;
     margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
-
 .quiz-header {
     display: flex;
     justify-content: space-between;
@@ -402,3 +403,69 @@
     display: none;
 }
 
+/* Report button & dropdown */
+.report-section {
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.report-btn {
+    background: none;
+    border: 1px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.report-btn:hover {
+    border-color: #f59e0b;
+    color: #d97706;
+    background: #fffbeb;
+}
+
+.report-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.4rem;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+    z-index: 10;
+    min-width: 200px;
+}
+
+.report-dropdown.hidden {
+    display: none;
+}
+
+.report-option {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.report-option:hover {
+    background: var(--gray-50);
+}
+
+.report-option.selected {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    font-weight: 600;
+}

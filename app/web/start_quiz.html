@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2DD4BF">
-    <title>Sophia Quiz - In Progress</title>
+    <title>MedSophia-OWILX Quiz - In Progress</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/css/quiz.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -457,6 +457,18 @@ function startQuiz(userId, questions) {
             </div>
             <p class="rating-label">How well did you know this?</p>`;
 
+        // After the rating-row + rating-label HTML:
+        html += `
+          <div class="report-section">
+            <button class="report-btn" id="report-btn-${q.id}">
+              <i class="fas fa-flag"></i> Report Issue
+            </button>
+            <div class="report-dropdown hidden" id="report-dropdown-${q.id}">
+              <button class="report-option" data-reason="wrong_answers">Wrong answers</button>
+              <button class="report-option" data-reason="wrong_question">Wrong question</button>
+              <button class="report-option" data-reason="wrong_explanation">Wrong explanation</button>
+            </div>
+          </div>`;
         questionCard.innerHTML = html;
         currentEl.textContent  = currentIndex + 1;
 
@@ -473,6 +485,35 @@ function startQuiz(userId, questions) {
                 });
             });
         });
+
+        // Toggle report dropdown
+const reportBtn = questionCard.querySelector(`#report-btn-${q.id}`);
+const reportDropdown = questionCard.querySelector(`#report-dropdown-${q.id}`);
+
+reportBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  reportDropdown.classList.toggle('hidden');
+});
+
+// When an option is selected
+reportDropdown.querySelectorAll('.report-option').forEach(optBtn => {
+  optBtn.addEventListener('click', () => {
+    const reason = optBtn.dataset.reason;
+    // Store the report reason – use a separate object or extend qualities
+    // For now, just highlight the selected option and close the dropdown
+    reportDropdown.querySelectorAll('.report-option').forEach(b => b.classList.remove('selected'));
+    optBtn.classList.add('selected');
+    reportDropdown.classList.add('hidden');
+    // Optional: log or store the reason (e.g., reportReasons[q.id] = reason)
+  });
+});
+
+// Close dropdown if clicking outside
+document.addEventListener('click', function closeReport(e) {
+  if (!reportBtn.contains(e.target) && !reportDropdown.contains(e.target)) {
+    reportDropdown.classList.add('hidden');
+  }
+}, { once: true }); // remove listener after first click handling – use a named function if you prefer
 
         // Update nav button states
         document.getElementById('review-prev').disabled = currentIndex === 0;
