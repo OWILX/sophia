@@ -71,6 +71,30 @@
             <button class="secondary-btn" id="next">Next</button>
             <button class="primary-btn hidden" id="submit">Submit Quiz</button>
         </div>
+        <!-- Report Modal (hidden by default) -->
+<div id="report-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h3 class="modal-title">Report a Problem</h3>
+
+    <label class="modal-label">Issue type</label>
+    <select id="report-type" class="modal-select">
+      <option value="">-- Select --</option>
+      <option value="wrong_answers">Wrong answers</option>
+      <option value="wrong_question">Wrong question</option>
+      <option value="wrong_explanation">Wrong explanation</option>
+    </select>
+    <p class="modal-error hidden" id="report-type-error">Please select a reason.</p>
+
+    <label class="modal-label">Description (optional)</label>
+    <textarea id="report-description" class="modal-textarea" maxlength="500" placeholder="Add any details..."></textarea>
+    <p class="modal-hint">Max 500 characters</p>
+
+    <div class="modal-actions">
+      <button type="button" id="report-cancel" class="secondary-btn">Cancel</button>
+      <button type="button" id="report-submit" class="primary-btn">Submit Report</button>
+    </div>
+  </div>
+</div>
     </div>
 
 </div>
@@ -138,6 +162,21 @@ async function init() {
         .map(normalizeQuestion);
 
     startQuiz(user.id, questions);
+}
+
+async function submitReport(questionId, reportType, description) {
+  const { data: { user } } = await client.auth.getUser();
+  
+  const { error } = await client
+    .from('question_reports')
+    .insert({
+      user_id: user.id,
+      question_id: questionId,
+      report_type: reportType,
+      description: description.trim()
+    });
+
+  return { ok: !error, error: error?.message };
 }
 
 // ─────────────────────────────────────────────
@@ -457,18 +496,13 @@ function startQuiz(userId, questions) {
             </div>
             <p class="rating-label">How well did you know this?</p>`;
 
-        // After the rating-row + rating-label HTML:
+        // In renderReviewQuestion(), after the rating HTML, BEFORE questionCard.innerHTML:
         html += `
-          <div class="report-section">
-            <button class="report-btn" id="report-btn-${q.id}">
-              <i class="fas fa-flag"></i> Report Issue
-            </button>
-            <div class="report-dropdown hidden" id="report-dropdown-${q.id}">
-              <button class="report-option" data-reason="wrong_answers">Wrong answers</button>
-              <button class="report-option" data-reason="wrong_question">Wrong question</button>
-              <button class="report-option" data-reason="wrong_explanation">Wrong explanation</button>
-            </div>
-          </div>`;
+  <div class="report-section">
+    <button class="report-btn" id="open-report-btn-${q.id}">
+      <i class="fas fa-flag"></i> Report Issue
+    </button>
+  </div>`;
         questionCard.innerHTML = html;
         currentEl.textContent  = currentIndex + 1;
 
@@ -487,34 +521,60 @@ function startQuiz(userId, questions) {
         });
 
         // Toggle report dropdown
-const reportBtn = questionCard.querySelector(`#report-btn-${q.id}`);
-const reportDropdown = questionCard.querySelector(`#report-dropdown-${q.id}`);
+// Attach report modal logic
+const openReportBtn = questionCard.querySelector(`#open-report-btn-${q.id}`);
+const modal = document.getElementById('report-modal');
+const typeSelect = document.getElementById('report-type');
+const descTextarea = document.getElementById('report-description');
+const typeError = document.getElementById('report-type-error');
+const submitBtn = document.getElementById('report-submit');
+const cancelBtn = document.getElementById('report-cancel');
 
-reportBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  reportDropdown.classList.toggle('hidden');
+openReportBtn.addEventListener('click', () => {
+    // Reset form
+    typeSelect.value = '';
+    descTextarea.value = '';
+    typeError.classList.add('hidden');
+    // Store current question id for later use
+    modal.dataset.questionId = q.id;
+    modal.classList.remove('hidden');
 });
 
-// When an option is selected
-reportDropdown.querySelectorAll('.report-option').forEach(optBtn => {
-  optBtn.addEventListener('click', () => {
-    const reason = optBtn.dataset.reason;
-    // Store the report reason – use a separate object or extend qualities
-    // For now, just highlight the selected option and close the dropdown
-    reportDropdown.querySelectorAll('.report-option').forEach(b => b.classList.remove('selected'));
-    optBtn.classList.add('selected');
-    reportDropdown.classList.add('hidden');
-    // Optional: log or store the reason (e.g., reportReasons[q.id] = reason)
-  });
+cancelBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
 });
 
-// Close dropdown if clicking outside
-document.addEventListener('click', function closeReport(e) {
-  if (!reportBtn.contains(e.target) && !reportDropdown.contains(e.target)) {
-    reportDropdown.classList.add('hidden');
-  }
-}, { once: true }); // remove listener after first click handling – use a named function if you prefer
+// Close on overlay click
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.add('hidden');
+});
 
+// Submit handling
+submitBtn.addEventListener('click', async () => {
+    const reportType = typeSelect.value;
+    if (!reportType) {
+        typeError.classList.remove('hidden');
+        return;
+    }
+    typeError.classList.add('hidden');
+
+    const questionId = modal.dataset.questionId;
+    const description = descTextarea.value.slice(0, 500); // already limited by maxlength
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const result = await submitReport(questionId, reportType, description);
+    if (result.ok) {
+        // Success feedback – you can show a brief message
+        alert('Report submitted. Thank you!');
+        modal.classList.add('hidden');
+    } else {
+        alert('Failed to submit report. Please try again.');
+    }
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Report';
+});
         // Update nav button states
         document.getElementById('review-prev').disabled = currentIndex === 0;
         document.getElementById('review-next').disabled = currentIndex === questions.length - 1;
