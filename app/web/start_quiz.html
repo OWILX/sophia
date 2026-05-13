@@ -527,7 +527,7 @@ const modal = document.getElementById('report-modal');
 const typeSelect = document.getElementById('report-type');
 const descTextarea = document.getElementById('report-description');
 const typeError = document.getElementById('report-type-error');
-const submitBtn = document.getElementById('report-submit');
+const submitReportBtn = document.getElementById('report-submit');
 const cancelBtn = document.getElementById('report-cancel');
 
 openReportBtn.addEventListener('click', () => {
@@ -550,7 +550,7 @@ modal.addEventListener('click', (e) => {
 });
 
 // Submit handling
-submitBtn.addEventListener('click', async () => {
+submitReportBtn.addEventListener('click', async () => {
     const reportType = typeSelect.value;
     if (!reportType) {
         typeError.classList.remove('hidden');
@@ -561,8 +561,8 @@ submitBtn.addEventListener('click', async () => {
     const questionId = modal.dataset.questionId;
     const description = descTextarea.value.slice(0, 500); // already limited by maxlength
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
+    submitReportBtn.disabled = true;
+    submitReportBtn.textContent = 'Sending...';
 
     const result = await submitReport(questionId, reportType, description);
     if (result.ok) {
@@ -572,8 +572,8 @@ submitBtn.addEventListener('click', async () => {
     } else {
         alert('Failed to submit report. Please try again.');
     }
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Report';
+    submitReportBtn..disabled = false;
+    submitReportBtn.textContent = 'Submit Report';
 });
         // Update nav button states
         document.getElementById('review-prev').disabled = currentIndex === 0;

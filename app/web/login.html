@@ -3,21 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sophia-OWILX • Sign In</title>
-
-  <!-- PWA -->
+  <title>MedSophia-OWILX • Sign In | Sign Up</title>
+  
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2DD4BF" />
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-
-  <!-- Styles -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="stylesheet" href="assets/css/login.css" />
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -27,8 +21,8 @@
 
     <!-- Brand / Info Panel -->
     <aside class="brand-panel">
-      <img src="assets/images/logo2.png" alt="Sophia-OWILX Logo" class="brand-logo" />
-      <h1>Sophia-OWILX</h1>
+      <img src="assets/images/logo2.png" alt="MedSophia-OWILX Logo" class="brand-logo" />
+      <h1>MedSophia-OWILX</h1>
       <p>
         Study to show thyself.<br />
         Master your courses with fun quizzes.
@@ -37,28 +31,87 @@
 
     <!-- Auth Card -->
     <section class="auth-panel">
-      <div class="login-card">
-        <img src="assets/images/logo2.png" alt="" class="login-logo" />
+      <div class="login-card" id="auth-card">
+  <img src="assets/images/logo2.png" alt="" class="login-logo" />
 
-        <h2>Welcome back</h2>
+  <div id="auth-content">
 
-        <div class="login-actions">
-          <button class="btn btn-google" id="google-btn">
-            <img src="assets/images/google.png" alt="Google Logo" class="google-logo" />
-            Continue with Google
-          </button>
+    <!-- DEFAULT VIEW -->
+    <div class="auth-default active-view">
+      <h2>Welcome back</h2>
 
-          <button class="btn btn-guest">
-            <i class="fa-solid fa-user"></i>
-            Continue with Email Address
-          </button>
+      <div class="login-actions">
+        <button class="btn btn-google" id="google-btn">
+          <img src="assets/images/google.png" alt="Google Logo" class="google-logo" />
+          Continue with Google
+        </button>
+
+        <button class="btn btn-guest" id="email-btn">
+          <i class="fa-solid fa-envelope"></i>
+          Continue with Email Address
+        </button>
+      </div>
+    </div>
+
+    <!-- EMAIL AUTH VIEW -->
+    <div class="auth-form-view hidden-view" id="email-auth-view">
+
+      <div class="auth-header">
+        <h2 id="form-title">Create account</h2>
+
+        <button class="back-btn" id="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+
+      <form class="auth-form">
+
+        <div class="input-group">
+          <i class="fa-solid fa-envelope"></i>
+          <input
+            type="email"
+            placeholder="Email address"
+            required
+          />
         </div>
 
-        <p class="terms">
-          By continuing, you agree to our
-          <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <div class="input-group" id="confirm-password-group">
+          <i class="fa-solid fa-lock"></i>
+          <input
+            type="password"
+            placeholder="Confirm password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-submit">
+          Sign Up
+        </button>
+
+        <p class="switch-mode">
+          Already have an account?
+          <span id="toggle-auth-mode">Login</span>
         </p>
-      </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <p class="terms">
+    By continuing, you agree to our
+    <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+  </p>
+</div>
     </section>
 
   </section>
