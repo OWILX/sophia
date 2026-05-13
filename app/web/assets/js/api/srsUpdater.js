@@ -79,8 +79,8 @@ export async function submitSRSUpdate(userId, qualities) {
       questionData?.map(q => [q.id, q.module_id]) ?? []
     );
   }
-
-  const records = questionIds.map(qid => {
+    const today = new Date().toISOString().split('T')[0];
+    const records = questionIds.map(qid => {
     const quality   = QUALITY[qualities[qid]] ?? 1;
     const progress  = map[qid] ?? null;
 
@@ -99,6 +99,7 @@ export async function submitSRSUpdate(userId, qualities) {
       ease_factor:      next.ease_factor,
       correct_streak:   next.correct_streak,
       total_attempts:   (progress?.total_attempts ?? 0) + 1,
+      last_reviewed_date: today
     };
   });
 
