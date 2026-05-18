@@ -350,40 +350,7 @@ input:checked + .slider:before {
     color: var(--white);
 }
 
-/* Toast */
-#toast-container {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    pointer-events: none;
-}
 
-.toast {
-    background: var(--gray-800);
-    color: var(--white);
-    padding: var(--spacing-2) var(--spacing-4);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    pointer-events: auto;
-    animation: toast-in 0.3s ease, toast-out 0.3s ease 2.5s forwards;
-    max-width: 90vw;
-    text-align: center;
-}
-
-.toast.error {
-    background: var(--error);
-}
-
-.toast.success {
-    background: #10B981;
-}
 
 /* Dark Mode Overrides */
 :root.dark {
