@@ -227,7 +227,51 @@ function startQuiz(userId, questions) {
     const prevBtn      = document.getElementById('prev');
     const nextBtn      = document.getElementById('next');
     const submitBtn    = document.getElementById('submit');
+    // Attach report modal logic
+const openReportBtn = questionCard.querySelector(`#open-report-btn-${q.id}`);
+const modal = document.getElementById('report-modal');
+const typeSelect = document.getElementById('report-type');
+const descTextarea = document.getElementById('report-description');
+const typeError = document.getElementById('report-type-error');
+const submitReportBtn = document.getElementById('report-submit');
+const cancelBtn = document.getElementById('report-cancel');
 
+cancelBtn.addEventListener('click', () => {
+modal.classList.add('hidden');
+});
+
+// Close on overlay click
+modal.addEventListener('click', (e) => {
+if (e.target === modal) modal.classList.add('hidden');
+});
+
+// Submit handling
+submitReportBtn.addEventListener('click', async () => {
+const reportType = typeSelect.value;
+if (!reportType) {
+typeError.classList.remove('hidden');
+return;
+}
+typeError.classList.add('hidden');
+
+const questionId = modal.dataset.questionId;  
+const description = descTextarea.value.slice(0, 500); // already limited by maxlength  
+
+submitReportBtn.disabled = true;  
+submitReportBtn.textContent = 'Sending...';  
+
+const res = await submitReport(questionId, reportType, description);  
+if (res.ok) {  
+    // Success feedback – you can show a brief message  
+    alert('Report submitted. Thank you!');  
+    modal.classList.add('hidden');  
+} else {  
+    alert('Failed to submit report. Please try again.');  
+}  
+submitReportBtn.disabled = false;  
+submitReportBtn.textContent = 'Submit Report';
+
+});
     totalEl.textContent = questions.length;
 
     document.getElementById('loading-screen').style.display = 'none';
@@ -521,59 +565,16 @@ function startQuiz(userId, questions) {
         });
 
         // Toggle report dropdown
-// Attach report modal logic
-const openReportBtn = questionCard.querySelector(`#open-report-btn-${q.id}`);
-const modal = document.getElementById('report-modal');
-const typeSelect = document.getElementById('report-type');
-const descTextarea = document.getElementById('report-description');
-const typeError = document.getElementById('report-type-error');
-const submitReportBtn = document.getElementById('report-submit');
-const cancelBtn = document.getElementById('report-cancel');
+
 
 openReportBtn.addEventListener('click', () => {
-    // Reset form
     typeSelect.value = '';
     descTextarea.value = '';
     typeError.classList.add('hidden');
-    // Store current question id for later use
+
     modal.dataset.questionId = q.id;
+
     modal.classList.remove('hidden');
-});
-
-cancelBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-});
-
-// Close on overlay click
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.classList.add('hidden');
-});
-
-// Submit handling
-submitReportBtn.addEventListener('click', async () => {
-    const reportType = typeSelect.value;
-    if (!reportType) {
-        typeError.classList.remove('hidden');
-        return;
-    }
-    typeError.classList.add('hidden');
-
-    const questionId = modal.dataset.questionId;
-    const description = descTextarea.value.slice(0, 500); // already limited by maxlength
-
-    submitReportBtn.disabled = true;
-    submitReportBtn.textContent = 'Sending...';
-
-    const result = await submitReport(questionId, reportType, description);
-    if (result.ok) {
-        // Success feedback – you can show a brief message
-        alert('Report submitted. Thank you!');
-        modal.classList.add('hidden');
-    } else {
-        alert('Failed to submit report. Please try again.');
-    }
-    submitReportBtn.disabled = false;
-    submitReportBtn.textContent = 'Submit Report';
 });
         // Update nav button states
         document.getElementById('review-prev').disabled = currentIndex === 0;

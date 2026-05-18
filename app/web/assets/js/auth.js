@@ -1,7 +1,6 @@
 import { client } from "./supabase.js";
 
-const DASHBOARD_URL =
-  "https://medsophia-owilx.netlify.app/app/web/dashboard.html";
+const DASHBOARD_URL = "https://medsophia-owilx.netlify.app/app/web/dashboard.html";
 
 // ────────────────────────────────────────────────
 // UI ELEMENTS

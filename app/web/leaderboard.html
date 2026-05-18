@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2DD4BF">
-    <title>Sophia-OWILX Notifications</title>
+    <title>MedSophia-OWILX Leaderboard</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/css/leaderboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
@@ -34,17 +34,22 @@
             <!-- Leaderboard Section -->
             <section class="leaderboard-section" aria-labelledby="leaderboard-title">
                 <div class="section-header">
-                    <h2 id="leaderboard-title">Top 20 Users</h2>
-                    <select id="criteria-select" aria-label="Select Criteria">
-                        <option value="points">Points</option>
-                        <option value="course-points">Per Course Points</option>
-                    </select>
-                    <select id="period-select" aria-label="Select Period">
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="bimonthly">Bi-Monthly</option>
-                        <option value="alltime">All Time</option>
-                    </select>
+                    <h2 id="leaderboard-title">🏆 Top Performers</h2>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                        <select id="criteria-select" aria-label="Rank by" class="criteria-select">
+                            <option value="points">Overall Mastery</option>
+                            <option value="course-points">Per Course Mastery</option>
+                        </select>
+                        <div class="limit-selector-wrapper">
+                            <label>Show</label>
+                            <select id="limit-select" aria-label="Number of top users">
+                                <option value="10">Top 10</option>
+                                <option value="20" selected>Top 20</option>
+                                <option value="30">Top 30</option>
+                                <option value="50">Top 50</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div id="course-select-wrapper" class="hidden">
                     <select id="course-select" aria-label="Select Course">
@@ -54,8 +59,8 @@
                         <option value="literature">Literature</option>
                     </select>
                 </div>
-                <ul class="leaderboard-list">
-                    <!-- Skeleton states -->
+                <ul class="leaderboard-list" id="leaderboard-list">
+                    <!-- skeleton loading state displayed by JS initially -->
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
@@ -66,22 +71,19 @@
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
                     <li class="leaderboard-item skeleton" aria-hidden="true"></li>
-                    <!-- Real content populated by JS -->
                 </ul>
             </section>
 
-            <!-- Competitions Section -->
+            <!-- Competitions Section (unchanged static) -->
             <section class="competitions-section" aria-labelledby="competitions-title">
                 <div class="section-header">
                     <h2 id="competitions-title">Most Engaged Competitions</h2>
                     <a href="#" class="more-link">View All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <ul class="competitions-list">
-                    <!-- Skeleton states -->
                     <li class="competition-item skeleton" aria-hidden="true"></li>
                     <li class="competition-item skeleton" aria-hidden="true"></li>
                     <li class="competition-item skeleton" aria-hidden="true"></li>
-                    <!-- Real content (hidden initially) -->
                     <li class="competition-item real-content hidden">
                         <i class="fas fa-trophy competition-icon"></i>
                         <div class="competition-content">
@@ -142,6 +144,5 @@
         </nav>
     </footer>
 
-    <script src="assets/js/leaderboard.js"></script>
 </body>
 </html>
