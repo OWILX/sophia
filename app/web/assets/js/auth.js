@@ -1,5 +1,5 @@
 import { client } from "./supabase.js";
-
+import {showToast} from "./tools.js";
 const DASHBOARD_URL = "https://medsophia-owilx.netlify.app/app/web/dashboard.html";
 
 // ────────────────────────────────────────────────
@@ -26,11 +26,9 @@ const passwordInputs = document.querySelectorAll(
   'input[type="password"]'
 );
 
-const switchModeContainer =
-  document.querySelector(".switch-mode");
+const switchModeContainer = document.querySelector(".switch-mode");
 
-const confirmPasswordGroup =
-  document.getElementById("confirm-password-group");
+const confirmPasswordGroup = document.getElementById("confirm-password-group");
 
 // ────────────────────────────────────────────────
 // STATE
@@ -110,7 +108,11 @@ function reconnectToggle() {
 }
 
 function showError(message) {
-  alert(message);
+  showToast(message, 'error');
+}
+
+function showError(message) {
+  showToast(message, 'success');
 }
 
 // ────────────────────────────────────────────────
@@ -123,6 +125,8 @@ async function checkUser() {
   } = await client.auth.getSession();
 
   if (session) {
+    document.body.classList.add("page-exit");
+    await new Promise((resolve) => setTimeout(resolve, 500));
     window.location.href = DASHBOARD_URL;
   }
 }
@@ -229,7 +233,7 @@ async function handleEmailAuth(e) {
 
     // Optional:
     // show success message before redirect
-
+    showSuccess("Login successful.");
     document.body.classList.add("page-exit");
 
     await new Promise((resolve) =>
