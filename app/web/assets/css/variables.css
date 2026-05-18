@@ -40,6 +40,7 @@
 
   --success: #22C55E;
   --warning: var(--accent);
+  --info: #17A2B8;
   --error: #EF4444;
 
   /* Shadows & Radius */
@@ -130,9 +131,11 @@
 .toast.error {
     background: var(--error);
 }
-
 .toast.success {
-    background: #10B981;
+    background: var(--success);
+}
+.toast.warning {
+    background: var(--warning);
 }
 .toast {
     opacity: 0;

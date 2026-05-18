@@ -1,4 +1,4 @@
-export function showToast(message, type = 'info', time_ms = 3000) {
+/**export function showToast(message, type = 'info', time_ms = 3000) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -9,7 +9,7 @@ export function showToast(message, type = 'info', time_ms = 3000) {
     setTimeout(() => {
         toast.remove();
     }, time_ms);
-}
+}*/
 export function showToast(message, type = 'info', time_ms = 3000) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
