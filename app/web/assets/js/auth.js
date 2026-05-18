@@ -111,7 +111,7 @@ function showError(message) {
   showToast(message, 'error');
 }
 
-function showError(message) {
+function showSuccess(message) {
   showToast(message, 'success');
 }
 
