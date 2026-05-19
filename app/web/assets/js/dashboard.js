@@ -251,10 +251,10 @@ function setupSidebar(isAndroid) {
       icon.classList.toggle('fa-chevron-right', shouldCollapse);
     }
 
-    localStorage.setItem('letstudy_sidebar_collapsed', shouldCollapse.toString());
+    localStorage.setItem('sidebar_collapsed', shouldCollapse.toString());
   }
 
-  const isSavedCollapsed = localStorage.getItem('letstudy_sidebar_collapsed') === 'true';
+  const isSavedCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
   if (window.innerWidth >= 768) {
     applyCollapsedState(isSavedCollapsed);
   }
@@ -270,7 +270,7 @@ function setupSidebar(isAndroid) {
     const isDesktopNow = window.innerWidth >= 768;
     if (isDesktopNow !== wasDesktop) {
       if (isDesktopNow) {
-        const saved = localStorage.getItem('letstudy_sidebar_collapsed') === 'true';
+        const saved = localStorage.getItem('sidebar_collapsed') === 'true';
         applyCollapsedState(saved);
         toggleBtn.style.display = 'flex';
       } else {

@@ -1,33 +1,28 @@
 import { client } from "./supabase.js";
 import {showToast} from "./tools.js";
 const DASHBOARD_URL = "https://medsophia-owilx.netlify.app/app/web/dashboard.html";
-
 // ────────────────────────────────────────────────
 // UI ELEMENTS
 // ────────────────────────────────────────────────
-
 const googleBtn = document.getElementById("google-btn");
 const emailBtn = document.getElementById("email-btn");
 const backBtn = document.getElementById("back-btn");
-
 const defaultView = document.querySelector(".auth-default");
 const formView = document.getElementById("email-auth-view");
-
 const formTitle = document.getElementById("form-title");
 const authForm = document.querySelector(".auth-form");
-
 const submitBtn = document.querySelector(".btn-submit");
-
 const emailInput = document.querySelector(
   'input[type="email"]'
 );
-
+const fullName = document.querySelector(
+  'input[type="name"]'
+);
 const passwordInputs = document.querySelectorAll(
   'input[type="password"]'
 );
-
 const switchModeContainer = document.querySelector(".switch-mode");
-
+const fullNameGroup = document.getElementById("fullNameGroup");
 const confirmPasswordGroup = document.getElementById("confirm-password-group");
 
 // ────────────────────────────────────────────────
@@ -72,6 +67,7 @@ function updateAuthMode() {
     submitBtn.textContent = "Login";
 
     confirmPasswordGroup.style.display = "none";
+    fullNameGroup.style.display = "none";
 
     switchModeContainer.innerHTML = `
       Don't have an account?
@@ -83,6 +79,7 @@ function updateAuthMode() {
     submitBtn.textContent = "Sign Up";
 
     confirmPasswordGroup.style.display = "flex";
+    fullNameGroup.style.display = "flex";
 
     switchModeContainer.innerHTML = `
       Already have an account?
@@ -115,6 +112,29 @@ function showSuccess(message) {
   showToast(message, 'success');
 }
 
+function validateSignup(name, email, password, confirmPassword) {
+    if (!name || !email || !password) {
+        showError('Please fill in all fields');
+        return false;
+    }
+    if (password.length < 6) {
+        showError('Password must be at least 6 characters');
+        return false;
+    }
+    if (password !== confirmPassword) {
+        showError("Passwords do not match.");
+        return false;
+  }
+    return true;
+}
+
+function validateLogin(email, password) {
+    if (!email || !password) {
+        showError('Please enter email and password');
+        return false;
+    }
+    return true;
+}
 // ────────────────────────────────────────────────
 // CHECK ACTIVE SESSION
 // ────────────────────────────────────────────────
@@ -184,67 +204,66 @@ async function handleEmailAuth(e) {
   e.preventDefault();
 
   const email = emailInput.value.trim();
-
   const password = passwordInputs[0].value;
-
-  const confirmPassword =
-    passwordInputs[1]?.value;
-
-  if (!email || !password) {
-    showError("Please fill all required fields.");
-    return;
-  }
-
-  if (!isLogin && password !== confirmPassword) {
-    showError("Passwords do not match.");
-    return;
-  }
+  const confirmPassword = passwordInputs[1]?.value;
+  const name = fullName?.value;
+  
 
   try {
     setLoading(submitBtn, true);
 
-    let response;
-
     // ───── LOGIN ─────
     if (isLogin) {
-      response =
+      if (!validateLogin(email, password)) return;
+      const { data, error } =
         await client.auth.signInWithPassword({
           email,
           password
         });
+        if (error) {
+            if (error.message.includes('Email not confirmed')) {
+                showError('Please confirm your email address first. Check your inbox.');
+            } else {
+                showError(error.message);
+            }
+        } else {
+        	showSuccess("Login successful.");
+            passwordInputs[0].value = "";
+            window.location.href = "index.html";
+            document.body.classList.add("page-exit");
+            await new Promise((resolve) =>setTimeout(resolve, 500));
+            window.location.href = DASHBOARD_URL;
+        }
     }
 
     // ───── SIGNUP ─────
     else {
-      response = await client.auth.signUp({
+      if (!validateSignup(name, email, password, confirmPassword)) return;
+      const { data, error }  = await client.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: DASHBOARD_URL
+          data: { full_name: name }
         }
       });
-    }
-
-    const { error } = response;
-
     if (error) {
-      throw error;
+            showError(error.message);
+        } else {
+            if (data.user?.identities?.length === 0) {
+                showError('User already exists. Please log in instead.');
+            } else {
+                showSuccess("Account created successfully! Please check your email to confirm your account.");
+                passwordInputs.forEach(field => { field.value = "";});
+                document.body.classList.add("page-exit");
+                await new Promise((resolve) =>setTimeout(resolve, 500));
+                window.location.href = DASHBOARD_URL;
+            }
+        }
     }
-
-    // Optional:
-    // show success message before redirect
-    showSuccess("Login successful.");
-    document.body.classList.add("page-exit");
-
-    await new Promise((resolve) =>
-      setTimeout(resolve, 500)
-    );
-
-    window.location.href = DASHBOARD_URL;
+    
   } catch (error) {
     console.error(error);
-
-    showError(error.message);
+    showError("Network Error. Please try again.");
   } finally {
     setLoading(submitBtn, false);
   }
