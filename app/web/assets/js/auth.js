@@ -112,6 +112,13 @@ function showSuccess(message) {
   showToast(message, 'success');
 }
 
+function getFriendlyErrorMessage(error) {
+  if (error.message.includes('Email not confirmed')) {
+    return 'Please confirm your email address first. Check your inbox.';
+  }
+  return error.message;
+}
+
 function validateSignup(name, email, password, confirmPassword) {
     if (!name || !email || !password) {
         showError('Please fill in all fields');
@@ -135,6 +142,14 @@ function validateLogin(email, password) {
     }
     return true;
 }
+
+function redirectToDashboard() {
+  document.body.classList.add("page-exit");
+  const redirect = () => window.location.href = DASHBOARD_URL;
+  document.body.addEventListener("animationend", redirect, { once: true });
+  setTimeout(redirect, 1000); // Fallback after 1 second
+}
+
 // ────────────────────────────────────────────────
 // CHECK ACTIVE SESSION
 // ────────────────────────────────────────────────
@@ -144,10 +159,7 @@ async function checkUser() {
     const { data: { session }, error } = await client.auth.getSession();
     if (error) throw error;
     if (session) {
-      	document.body.classList.add("page-exit");
-          const redirect = () => window.location.href = DASHBOARD_URL;  
-         document.body.addEventListener("animationend", redirect, { once: true });  
-         setTimeout(redirect, 1000); // Fallback after 1 second  
+      redirectToDashboard();
     }
   } catch (error) {
     console.error("Session check failed:", error);
@@ -199,47 +211,36 @@ async function handleEmailAuth(e) {
     // ───── LOGIN ─────
     if (isLogin) {
       if (!validateLogin(email, password)) return;
-      const { data, error } =
+      const { error } =
         await client.auth.signInWithPassword({
           email,
           password
         });
         if (error) {
-            if (error.message.includes('Email not confirmed')) {
-                showError('Please confirm your email address first. Check your inbox.');
-            } else {
-                showError(error.message);
-            }
+            showError(getFriendlyErrorMessage(error));
         } else {
         	showSuccess("Login successful.");
             passwordInputs[0].value = "";
-            document.body.classList.add("page-exit");
-            const redirect = () => window.location.href = DASHBOARD_URL;  
-            document.body.addEventListener("animationend", redirect, { once: true });  
-            setTimeout(redirect, 1000); // Fallback after 1 second  
+            redirectToDashboard();
         }
     }
 
     // ───── SIGNUP ─────
     else {
       if (!validateSignup(name, email, password, confirmPassword)) return;
-      const { data, error }  = await client.auth.signUp({
+      const { error }  = await client.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: name }
         }
       });
-      console.log(data);
     if (error) {
             showError(error.message);
         } else {
                 showSuccess("Account created successfully! Please check your email to confirm your account.");
                 passwordInputs.forEach(field => { field.value = "";});
-                document.body.classList.add("page-exit");
-                const redirect = () => window.location.href = DASHBOARD_URL;  
-               document.body.addEventListener("animationend", redirect, { once: true });  
-               setTimeout(redirect, 1000); // Fallback after 1 second  
+                redirectToDashboard();
             }
     }
     
@@ -284,8 +285,5 @@ document.addEventListener(
       "submit",
       handleEmailAuth
     );
-
-    // Initialize toggle system
-    reconnectToggle();
   }
 );
