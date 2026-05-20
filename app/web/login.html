@@ -64,21 +64,22 @@
 
       <form class="auth-form">
 
-        <div class="input-group">
-          <i class="fa-solid fa-envelope"></i>
+        <div class="input-group" of="fullNameGroup">
+          <i class="fa-solid fa-user"></i>
           <input
-            type="name"
+            type="text"
             placeholder="Full Name"
             required
+            aria-label="Full Name"
           />
         </div>
-
-        <div class="input-group" id="fullNameGroup">
+        <div class="input-group" id="emailGroup">
           <i class="fa-solid fa-envelope"></i>
           <input
             type="email"
             placeholder="Email address"
             required
+            aria-label="Email address"
           />
         </div>
 
@@ -88,6 +89,7 @@
             type="password"
             placeholder="Password"
             required
+            aria-label="Password"
           />
         </div>
 
@@ -96,6 +98,7 @@
           <input
             type="password"
             placeholder="Confirm password"
+            aria-label="Confirm password"
           />
         </div>
 
