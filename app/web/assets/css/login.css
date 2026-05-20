@@ -72,7 +72,14 @@
   display: grid;
   place-items: center;
 }
-
+@supports not (gap: 1.5rem) {  
+      .login-card {  
+        display: block;  
+      }  
+      .login-card > * + * {  
+        margin-top: 1.5rem;  
+      }  
+}  
 /* Card */
 .login-card {
   width: 100%;
@@ -239,8 +246,10 @@
   background: rgba(255,255,255,0.6);
   cursor: pointer;
   transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 .back-btn:hover {
   transform: scale(1.05);
 }
@@ -368,34 +377,7 @@
     transform: translateY(0);
   }
 }
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: #e5e7eb;
-  border-radius: 0.75rem;
-}
 
-.skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  animation: shimmer 1.2s infinite;
-}
-
-@keyframes shimmer {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
 .btn.loading {
   pointer-events: none;
   color: transparent;
