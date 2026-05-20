@@ -144,15 +144,17 @@ async function checkUser() {
     const { data: { session }, error } = await client.auth.getSession();
     if (error) throw error;
     if (session) {
-          document.body.addEventListener("animationend", () => {
-          window.location.href = DASHBOARD_URL;
-            }, { once: true });
+      	document.body.classList.add("page-exit");
+          const redirect = () => window.location.href = DASHBOARD_URL;  
+         document.body.addEventListener("animationend", redirect, { once: true });  
+         setTimeout(redirect, 1000); // Fallback after 1 second  
     }
   } catch (error) {
     console.error("Session check failed:", error);
     showError("Failed to check login status. Please refresh.");
   }
 }
+
 // ────────────────────────────────────────────────
 // GOOGLE AUTH
 // ────────────────────────────────────────────────
@@ -212,9 +214,9 @@ async function handleEmailAuth(e) {
         	showSuccess("Login successful.");
             passwordInputs[0].value = "";
             document.body.classList.add("page-exit");
-            document.body.addEventListener("animationend", () => {
-                window.location.href = DASHBOARD_URL;
-            }, { once: true });
+            const redirect = () => window.location.href = DASHBOARD_URL;  
+            document.body.addEventListener("animationend", redirect, { once: true });  
+            setTimeout(redirect, 1000); // Fallback after 1 second  
         }
     }
 
@@ -228,15 +230,16 @@ async function handleEmailAuth(e) {
           data: { full_name: name }
         }
       });
+      console.log(data);
     if (error) {
             showError(error.message);
         } else {
                 showSuccess("Account created successfully! Please check your email to confirm your account.");
                 passwordInputs.forEach(field => { field.value = "";});
                 document.body.classList.add("page-exit");
-                document.body.addEventListener("animationend", () => {
-                    window.location.href = DASHBOARD_URL;
-                }, { once: true });
+                const redirect = () => window.location.href = DASHBOARD_URL;  
+               document.body.addEventListener("animationend", redirect, { once: true });  
+               setTimeout(redirect, 1000); // Fallback after 1 second  
             }
     }
     
