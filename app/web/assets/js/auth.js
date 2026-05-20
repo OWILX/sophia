@@ -16,7 +16,7 @@ const emailInput = document.querySelector(
   'input[type="email"]'
 );
 const fullName = document.querySelector(
-  'input[type="name"]'
+  'input[type="text"]'
 );
 const passwordInputs = document.querySelectorAll(
   'input[type="password"]'
@@ -158,24 +158,15 @@ async function checkUser() {
 async function handleGoogleAuth() {
   try {
     setLoading(googleBtn, true);
-
     document.body.classList.add("page-exit");
-
-    await new Promise((resolve) =>
-      setTimeout(resolve, 500)
-    );
-
-    const {
-      data: { session }
-    } = await client.auth.getSession();
-
+    
+    const {data: { session }} = await client.auth.getSession();
     if (session) {
       window.location.href = DASHBOARD_URL;
       return;
     }
 
-    const { error } =
-      await client.auth.signInWithOAuth({
+    const { error } = await client.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: DASHBOARD_URL
@@ -229,10 +220,10 @@ async function handleEmailAuth(e) {
         } else {
         	showSuccess("Login successful.");
             passwordInputs[0].value = "";
-            window.location.href = "index.html";
             document.body.classList.add("page-exit");
-            await new Promise((resolve) =>setTimeout(resolve, 500));
-            window.location.href = DASHBOARD_URL;
+            document.body.addEventListener("animationend", () => {
+                window.location.href = DASHBOARD_URL;
+            }, { once: true });
         }
     }
 
@@ -255,8 +246,9 @@ async function handleEmailAuth(e) {
                 showSuccess("Account created successfully! Please check your email to confirm your account.");
                 passwordInputs.forEach(field => { field.value = "";});
                 document.body.classList.add("page-exit");
-                await new Promise((resolve) =>setTimeout(resolve, 500));
-                window.location.href = DASHBOARD_URL;
+                document.body.addEventListener("animationend", () => {
+                    window.location.href = DASHBOARD_URL;
+                }, { once: true });
             }
         }
     }
