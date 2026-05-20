@@ -240,9 +240,6 @@ async function handleEmailAuth(e) {
     if (error) {
             showError(error.message);
         } else {
-            if (data.user?.identities?.length === 0) {
-                showError('User already exists. Please log in instead.');
-            } else {
                 showSuccess("Account created successfully! Please check your email to confirm your account.");
                 passwordInputs.forEach(field => { field.value = "";});
                 document.body.classList.add("page-exit");
@@ -250,7 +247,6 @@ async function handleEmailAuth(e) {
                     window.location.href = DASHBOARD_URL;
                 }, { once: true });
             }
-        }
     }
     
   } catch (error) {
