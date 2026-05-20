@@ -140,17 +140,19 @@ function validateLogin(email, password) {
 // ────────────────────────────────────────────────
 
 async function checkUser() {
-  const {
-    data: { session }
-  } = await client.auth.getSession();
-
-  if (session) {
-    document.body.classList.add("page-exit");
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    window.location.href = DASHBOARD_URL;
+  try {
+    const { data: { session }, error } = await client.auth.getSession();
+    if (error) throw error;
+    if (session) {
+          document.body.addEventListener("animationend", () => {
+          window.location.href = DASHBOARD_URL;
+            }, { once: true });
+    }
+  } catch (error) {
+    console.error("Session check failed:", error);
+    showError("Failed to check login status. Please refresh.");
   }
 }
-
 // ────────────────────────────────────────────────
 // GOOGLE AUTH
 // ────────────────────────────────────────────────
@@ -159,12 +161,6 @@ async function handleGoogleAuth() {
   try {
     setLoading(googleBtn, true);
     document.body.classList.add("page-exit");
-    
-    const {data: { session }} = await client.auth.getSession();
-    if (session) {
-      window.location.href = DASHBOARD_URL;
-      return;
-    }
 
     const { error } = await client.auth.signInWithOAuth({
         provider: "google",
@@ -173,16 +169,11 @@ async function handleGoogleAuth() {
         }
       });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
   } catch (error) {
     console.error(error);
-
     showError(error.message);
-
     setLoading(googleBtn, false);
-
     document.body.classList.remove("page-exit");
   }
 }
