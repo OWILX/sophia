@@ -1,0 +1,29 @@
+# API Endpoints and Credentials
+openai-api-base: "https://integrate.api.nvidia.com/v1"
+
+# Aider Engine Customizations
+
+# The main Architect model (The Brain)
+#model: "openai/qwen/qwen3-coder-480b-a35b-instruct"
+model: "openai/deepseek-ai/deepseek-v4-pro"
+
+# The Editor model (The Hands)
+editor-model: "openai/qwen/qwen3-next-80b-a3b-instruct"
+
+# The Weak model (The Git Commit Writer)
+weak-model: "openai/nvidia/llama-3.1-nemotron-nano-8b-v1"
+
+# Force Aider to use the Architect/Editor split workflow by default
+architect: true
+cache-prompts: true
+stream: false
+pretty: false
+timeout: 300
+
+# Context & Token Management
+map-tokens: 2048
+#context-window: 204800
+# max-chat-history-tokens: 20000
+map-refresh: auto
+edit-format: diff
+thinking-tokens: 1024
