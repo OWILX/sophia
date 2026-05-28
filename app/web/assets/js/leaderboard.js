@@ -64,6 +64,7 @@ async function fetchDummyCourseLeaderboard(course, limit) {
 }
   
   // Mock overall leaderboard (realistic demo)
+  // Mock fallback (only used if Supabase RPC fails)
   function generateMockOverallLeaderboard(limit) {
       const mockNames = ['Emma Watson', 'Liam Chen', 'Sophia Rodriguez', 'Noah Kim', 'Olivia Williams', 
              'Mason Brown', 'Isabella Garcia', 'Ethan Johnson', 'Ava Martinez', 'Lucas Lee',
@@ -119,17 +120,6 @@ function renderLeaderboard(entries) {
 
 function escapeHtml(str) {
   return str.replace(/[&<>]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[m] || m));
-}
-// Mock fallback (only used if Supabase RPC fails)
-function generateMockOverallLeaderboard(limit) {
-  const mockNames = ["Emma Watson", "Liam Chen", "Sophia Rodriguez", "Noah Kim", "Olivia Williams"];
-  const entries = [];
-  for (let i = 0; i < limit; i++) {
-    const name = mockNames[i % mockNames.length] + (i >= mockNames.length ? ` ${Math.floor(i / mockNames.length) + 1}` : "");
-    entries.push({ rank: i + 1, name, points: Math.floor(Math.random() * 2500 + 500) });
-  }
-  entries.sort((a, b) => b.points - a.points);
-  return entries.slice(0, limit);
 }
 
 // ---------- MAIN UPDATE ----------
